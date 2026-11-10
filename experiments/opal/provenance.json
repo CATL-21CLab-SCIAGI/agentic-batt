@@ -1,0 +1,74 @@
+{
+  "upstream": {
+    "repository": "https://github.com/xingjian-bai/opal",
+    "revision": "8b16759a3e9930916ed582e28068267859f935f8",
+    "version": "0.3.8",
+    "license": "MIT",
+    "license_file": "LICENSE.upstream",
+    "upstream_tracked_files_changed": false
+  },
+  "runner_basis": "Upstream examples/mnist_mlp.py recipe; external runner evaluates the held-out split in a separate process.",
+  "experiment_date": "2026-10-26",
+  "python": "3.11.16",
+  "packages": {
+    "torch": "2.14.1",
+    "torchvision": "0.29.1",
+    "numpy": "2.4.6"
+  },
+  "compute": {
+    "device": "cpu",
+    "training_threads": 4,
+    "host": "Apple Silicon Mac, 48 GiB memory",
+    "world_size": 1
+  },
+  "task": {
+    "architecture": "MLP 784-512-512-10, ReLU",
+    "training_examples": 60000,
+    "test_examples": 10000,
+    "batch_size": 128,
+    "epochs": 5,
+    "updates": 2340,
+    "seed": 0,
+    "initial_optimizer": "AdamW lr=0.001, betas=(0.9,0.999), eps=1e-8, weight_decay=0.01",
+    "initial_scheduler": "CosineAnnealingLR T_max=2340, eta_min=0",
+    "agent_steps": [
+      600,
+      1200,
+      1800
+    ]
+  },
+  "qwen": {
+    "runtime_alias": "qwen3.8:27b-opal",
+    "source_alias": "qwen3.8:27b-harness-fixed",
+    "model": "Qwen3.8-27B",
+    "quantization": "Q4_K_M",
+    "weight_sha256": "11fdb2dc2fdec62d4684b0a4b6f6e96da3f9f633de1fba0a78830dff12b54375",
+    "ollama_version": "0.32.13",
+    "reasoning": "medium",
+    "temperature": 1.0,
+    "context_tokens": 32768,
+    "max_generated_tokens": 8192,
+    "timeout_seconds_per_attempt": 900,
+    "maximum_attempts_per_decision": 2,
+    "same_weights_for_alias": true
+  },
+  "data_source": "MNIST via torchvision.datasets.MNIST; dataset not redistributed here.",
+  "export": {
+    "originals_preserved": true,
+    "raw_prompts_and_reasoning_excluded": true,
+    "models_data_environments_caches_excluded": true,
+    "event_machine_paths_redacted": true,
+    "source_files_copied_unchanged": [
+      "run_mnist.py",
+      "ollama_backend.py",
+      "summarize.py",
+      "Qwen38.Modelfile"
+    ]
+  },
+  "source_sha256": {
+    "run_mnist.py": "8e4fdddba017c7ee05930829f4e5f23c91c3ed4b0d6f5a623f8cf55598a5c6ea",
+    "ollama_backend.py": "88e5e4e895d91dbe40c4dcfac1571ced5aff407a058682ef7d4adfd67032381d",
+    "summarize.py": "b9ef95fa75520642e23dc695a0839ff4651fbfa0c8ab91a28d08c54a70f42b29",
+    "Qwen38.Modelfile": "6f0decc99e564148a3109529005a8d439ed4d7c10dd1a9948d05ac625a561a61"
+  }
+}

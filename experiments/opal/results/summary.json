@@ -1,0 +1,294 @@
+{
+  "results": {
+    "plain": {
+      "mode": "plain",
+      "seed": 0,
+      "epochs": 5,
+      "steps": 2340,
+      "batch_size": 128,
+      "threads": 4,
+      "training_seconds": 2.4180470000137575,
+      "final_training_loss": 0.005242209415882826,
+      "parameter_sha256": "daf22ca8b74e4dfe6201374e4928d57ed765f67ac78b22899b63be693a1b5330",
+      "opal_commit": "8b16759a3e99",
+      "torch_version": "2.14.1",
+      "agent_model": null,
+      "agent_wait_seconds": 0.0,
+      "test_accuracy": 0.984499990940094,
+      "test_loss": 0.051185984164476395,
+      "test_examples": 10000,
+      "separate_evaluation_process": true
+    },
+    "keep": {
+      "mode": "keep",
+      "seed": 0,
+      "epochs": 5,
+      "steps": 2340,
+      "batch_size": 128,
+      "threads": 4,
+      "training_seconds": 2.5528110000304878,
+      "final_training_loss": 0.005242209415882826,
+      "parameter_sha256": "daf22ca8b74e4dfe6201374e4928d57ed765f67ac78b22899b63be693a1b5330",
+      "opal_commit": "8b16759a3e99",
+      "torch_version": "2.14.1",
+      "decisions_requested": 3,
+      "decision_schedule": [
+        [
+          1.0,
+          3
+        ]
+      ],
+      "agent_model": null,
+      "agent_wait_seconds": 0.007034667069092393,
+      "test_accuracy": 0.984499990940094,
+      "test_loss": 0.051185984164476395,
+      "test_examples": 10000,
+      "separate_evaluation_process": true,
+      "event_counts": {
+        "start": 1,
+        "audit": 1,
+        "requested": 3,
+        "kept": 3,
+        "end": 1
+      },
+      "agent_decisions": [
+        {
+          "kind": "kept",
+          "utc": "2026-10-25T16:45:26+00:00",
+          "k": 1,
+          "requested_at": 600,
+          "applied_at": 600,
+          "lag_updates": 0,
+          "seconds": 0.0,
+          "cost_usd": 0.0
+        },
+        {
+          "kind": "kept",
+          "utc": "2026-10-25T16:45:27+00:00",
+          "k": 2,
+          "requested_at": 1200,
+          "applied_at": 1200,
+          "lag_updates": 0,
+          "seconds": 0.0,
+          "cost_usd": 0.0
+        },
+        {
+          "kind": "kept",
+          "utc": "2026-10-25T16:45:28+00:00",
+          "k": 3,
+          "requested_at": 1800,
+          "applied_at": 1800,
+          "lag_updates": 0,
+          "seconds": 0.0,
+          "cost_usd": 0.0
+        }
+      ]
+    },
+    "ollama": {
+      "mode": "ollama",
+      "seed": 0,
+      "epochs": 5,
+      "steps": 2340,
+      "batch_size": 128,
+      "threads": 4,
+      "training_seconds": 920.6179453749792,
+      "final_training_loss": 0.0034351092763245106,
+      "parameter_sha256": "7836e51528c1aec6d42cb4951dad4588462fc439aae468457cba46944676b848",
+      "opal_commit": "8b16759a3e99",
+      "torch_version": "2.14.1",
+      "decisions_requested": 3,
+      "decision_schedule": [
+        [
+          1.0,
+          3
+        ]
+      ],
+      "agent_model": "qwen3.8:27b-opal",
+      "agent_thinking": "medium",
+      "agent_max_output_tokens": 8192,
+      "agent_temperature": 1.0,
+      "agent_wait_seconds": 917.9575758739957,
+      "test_accuracy": 0.98580002784729,
+      "test_loss": 0.05123307928442955,
+      "test_examples": 10000,
+      "separate_evaluation_process": true,
+      "event_counts": {
+        "start": 1,
+        "audit": 2,
+        "requested": 3,
+        "kept": 2,
+        "applied": 1,
+        "end": 1
+      },
+      "agent_decisions": [
+        {
+          "kind": "kept",
+          "utc": "2026-10-26T01:12:29+00:00",
+          "k": 1,
+          "requested_at": 600,
+          "applied_at": 600,
+          "failed": true,
+          "lag_updates": 0,
+          "seconds": 0.0,
+          "cost_usd": null
+        },
+        {
+          "kind": "applied",
+          "utc": "2026-10-26T01:19:23+00:00",
+          "k": 2,
+          "requested_at": 1200,
+          "applied_at": 1200,
+          "version": 1,
+          "changed": [
+            "updater.py"
+          ],
+          "rebuilt_updater": true,
+          "swap_seconds": 0.019,
+          "lag_updates": 0,
+          "seconds": 413.1,
+          "cost_usd": 0.0
+        },
+        {
+          "kind": "kept",
+          "utc": "2026-10-26T01:20:40+00:00",
+          "k": 3,
+          "requested_at": 1800,
+          "applied_at": 1800,
+          "lag_updates": 0,
+          "seconds": 77.0,
+          "cost_usd": 0.0
+        }
+      ],
+      "ollama_calls": [
+        {
+          "utc": "2026-10-26T01:19:23.055851+00:00",
+          "model": "qwen3.8:27b-opal",
+          "seconds": 413.1300797499716,
+          "attempts": 2,
+          "changed": [
+            "updater.py"
+          ],
+          "rationale": "Observed: Loss at ~0.038, still decreasing. Decision 1 was lost to agent error. Current LR ~0.0005 mid-cosine. 1140 updates left.\n\nChanged: Replaced updater with AdamW carrying over exp_avg/exp_avg_sq from the previous optimizer, with a re-heated cosine schedule: LR 0.001 at update 1200 decaying to 0 at update 2340. This gives more gradient signal in remaining epochs. Betas/eps/weight decay unchanged for state compatibility.\n\nKept: analysis.py unchanged.\n\nPrediction: Loss ~0.015-0.02 by update 1800, test accuracy 97-98% by end. If loss > 0.025 at update 1800, re-heat insufficient.\n\nRules: Fixed cosine schedule update 1200\u21922340; no feedback-triggered adjustments.",
+          "prompt_eval_count": 11143,
+          "eval_count": 849,
+          "cost_usd": 0.0,
+          "accepted_by_adapter": true,
+          "source_sha256_before": {
+            "updater.py": "9093addcd68ed2beeb4d8bc6e2cf23beba552e30057011301e0e257581702934",
+            "analysis.py": "0882aa93bbe7fb3d520a936bd0039ed553b1c16b6b298e12b5f64c6e42c1bf95"
+          },
+          "source_sha256_after": {
+            "updater.py": "dddcae8da486b5b0d05a1c21c61ff08fa33af127d3ce6395b82047694856c214",
+            "analysis.py": "0882aa93bbe7fb3d520a936bd0039ed553b1c16b6b298e12b5f64c6e42c1bf95"
+          }
+        },
+        {
+          "utc": "2026-10-26T01:20:40.768212+00:00",
+          "model": "qwen3.8:27b-opal",
+          "seconds": 77.00294154201401,
+          "attempts": 1,
+          "changed": [],
+          "rationale": "Observed: Loss dropped from ~0.05 at update 1200 to ~0.018 at update 1800 (slope -0.2187/1000 updates). Loss window means declining steadily: 0.0366\u21920.0289. No non-finite losses, stable gradient norms, reasonable update-to-weight ratios. The re-heated cosine (0.001\u21920 over updates 1200-2340) is working as designed; current LR ~0.00046 with 540 updates remaining. Changed/kept: Keeping both programs unchanged. The training trajectory is healthy and converging well. With only 540 updates left and a well-behaved cosine decay, any modification carries more risk than benefit. The remaining LR budget is modest and the schedule shape is appropriate for this stage. Prediction: Loss should reach ~0.010-0.015 by update 2340, consistent with the current decay rate and diminishing gradient signal as LR\u21920. Test accuracy likely 97.5-98.5%. If loss plateaus above 0.02 by update 2340, the LR floor at zero was slightly too aggressive, but the gap to target is already small. Rules: Fixed cosine schedule (1200\u21922340), no feedback triggers. AdamW with carried-over momentum state, betas (0.9,0.999), eps 1e-8, weight decay 0.01.",
+          "prompt_eval_count": 10772,
+          "eval_count": 357,
+          "cost_usd": 0.0,
+          "accepted_by_adapter": true,
+          "source_sha256_before": {
+            "updater.py": "dddcae8da486b5b0d05a1c21c61ff08fa33af127d3ce6395b82047694856c214",
+            "analysis.py": "0882aa93bbe7fb3d520a936bd0039ed553b1c16b6b298e12b5f64c6e42c1bf95"
+          },
+          "source_sha256_after": {
+            "updater.py": "dddcae8da486b5b0d05a1c21c61ff08fa33af127d3ce6395b82047694856c214",
+            "analysis.py": "0882aa93bbe7fb3d520a936bd0039ed553b1c16b6b298e12b5f64c6e42c1bf95"
+          }
+        }
+      ],
+      "ollama_rejected_attempts": [
+        {
+          "error": "ValueError: All proposed-file errors: updater.py: unsupported direct call hasattr. For any unchanged file use null.",
+          "attempt_seconds": 356.06709629198303,
+          "accepted_by_adapter": false
+        },
+        {
+          "error": "ValueError: All proposed-file errors: updater.py: forbidden attribute _migrate. For any unchanged file use null.",
+          "attempt_seconds": 70.73621612502029,
+          "accepted_by_adapter": false
+        },
+        {
+          "error": "ValueError: All proposed-file errors: updater.py: forbidden attribute _get_lr. For any unchanged file use null.",
+          "attempt_seconds": 369.8049574170145,
+          "accepted_by_adapter": false
+        }
+      ]
+    },
+    "gemma": {
+      "mode": "ollama",
+      "seed": 0,
+      "epochs": 5,
+      "steps": 2340,
+      "batch_size": 128,
+      "threads": 4,
+      "training_seconds": 12.831292833958287,
+      "final_training_loss": 0.005242209415882826,
+      "parameter_sha256": "daf22ca8b74e4dfe6201374e4928d57ed765f67ac78b22899b63be693a1b5330",
+      "opal_commit": "8b16759a3e99",
+      "torch_version": "2.14.1",
+      "decisions_requested": 3,
+      "decision_schedule": [
+        [
+          1.0,
+          3
+        ]
+      ],
+      "agent_model": "gemma4:e2b-qat-google",
+      "agent_wait_seconds": 10.25954445899697,
+      "test_accuracy": 0.984499990940094,
+      "test_loss": 0.051185984164476395,
+      "test_examples": 10000,
+      "separate_evaluation_process": true
+    }
+  },
+  "controls_bitwise_identical": true,
+  "description": "One-seed CPU MNIST pilot: upstream MLP/AdamW recipe, three local-model opportunities; not a reproduction of the published large-model experiments.",
+  "held_out_test": "10,000 images evaluated in a separate process after training; no test feedback given to agent.",
+  "accuracy_delta_percentage_points": 0.1300036907196045,
+  "model_selection": {
+    "model": "qwen3.8:27b-opal",
+    "weights": "Qwen3.8-27B Q4_K_M",
+    "reasoning": "medium",
+    "scope": "Strongest installed candidate based on published coding results; not an exhaustive local ranking."
+  },
+  "decisions_summary": [
+    {
+      "update": 600,
+      "outcome": "failed; original optimizer kept",
+      "reason": "Adapter rejected hasattr, then a private helper method."
+    },
+    {
+      "update": 1200,
+      "outcome": "applied",
+      "change": "Restart cosine learning rate at 0.001, decay to 0 at 2340; preserve AdamW state."
+    },
+    {
+      "update": 1800,
+      "outcome": "kept",
+      "change": null
+    }
+  ],
+  "limits": [
+    "Single training seed and one small MNIST task.",
+    "First scheduled proposal could not be applied because of adapter restrictions.",
+    "Not a reproduction of the paper-scale experiments.",
+    "Accuracy improved while test cross entropy was essentially unchanged, slightly higher."
+  ],
+  "training_prefix_before_change_identical": true,
+  "net_additional_correct_test_predictions": 13,
+  "final_updater": "../programs/v001/updater.py",
+  "training_logs": {
+    "plain": "plain/training.jsonl",
+    "keep": "keep/training.jsonl",
+    "gemma": "gemma/training.jsonl",
+    "ollama": "qwen/training.jsonl"
+  },
+  "runtime_scope": "Successful run wall time includes failed decisions within that run, but excludes the separate interrupted maximum-reasoning attempt and earlier Gemma setup attempt."
+}

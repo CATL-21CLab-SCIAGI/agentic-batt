@@ -1,0 +1,22 @@
+{
+  "mode": "ollama",
+  "seed": 0,
+  "epochs": 5,
+  "steps": 2340,
+  "batch_size": 128,
+  "threads": 4,
+  "training_seconds": 12.831292833958287,
+  "final_training_loss": 0.005242209415882826,
+  "parameter_sha256": "daf22ca8b74e4dfe6201374e4928d57ed765f67ac78b22899b63be693a1b5330",
+  "opal_commit": "8b16759a3e99",
+  "torch_version": "2.14.1",
+  "decisions_requested": 3,
+  "decision_schedule": [
+    [
+      1.0,
+      3
+    ]
+  ],
+  "agent_model": "gemma4:e2b-qat-google",
+  "agent_wait_seconds": 10.25954445899697
+}

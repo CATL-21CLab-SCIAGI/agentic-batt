@@ -1,0 +1,46 @@
+{
+    "timestamp": "20261024_162757",
+    "experiment_type": "sim_vs_sim",
+    "best_parameters": {
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.9239841982735926,
+        "Negative electrode porosity": 0.2136758324170267,
+        "Negative electrode thickness [m]": 6.472617038977753e-05,
+        "Negative particle radius [m]": 1.2393429819299355e-05,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.66914855957366,
+        "Positive electrode porosity": 0.4652393613254507,
+        "Positive electrode thickness [m]": 8.347052064611762e-05,
+        "Positive particle radius [m]": 7.863370053282891e-07,
+        "Separator thickness [m]": 1.3875038691430048e-05
+    },
+    "best_total_loss": 0.2123835702513215,
+    "best_trial_index": "gen_2_subtrial_5",
+    "best_loss_list": {
+        "capacity": {
+            "loss_name": "capacity",
+            "loss_value": {
+                "cycle_1": {
+                    "rmse": 0.015464804053764603,
+                    "mape": 0.40606624801115976
+                }
+            }
+        },
+        "current": {
+            "loss_name": "current",
+            "loss_value": {
+                "cycle_1": {
+                    "rmse": 0.06210161282332775,
+                    "mape": 0.8048745327478318
+                }
+            }
+        },
+        "voltage": {
+            "loss_name": "voltage",
+            "loss_value": {
+                "cycle_1": {
+                    "rmse": 0.13481715337422917,
+                    "mape": 1.2785021526239237
+                }
+            }
+        }
+    }
+}

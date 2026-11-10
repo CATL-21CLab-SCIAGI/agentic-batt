@@ -1,0 +1,18 @@
+{
+  "qwen_max_reasoning": {
+    "status": "interrupted",
+    "stopped_at_update": 600,
+    "model": "qwen3.8:27b-harness-fixed",
+    "think": true,
+    "max_generated_tokens": 8192,
+    "reason": "First response spent all generation budget in reasoning and returned empty content. Retry interrupted; medium-reasoning experiment launched separately.",
+    "final_test_evaluation": null
+  },
+  "initial_gemma_adapter_attempt": {
+    "status": "completed_with_failed_agent_decisions",
+    "failed_decisions": 3,
+    "rejected_attempts": 6,
+    "applied_changes": 0,
+    "reason": "Incomplete updater or invalid diagnostics. Replaced by corrected adapter run shown in main comparison."
+  }
+}

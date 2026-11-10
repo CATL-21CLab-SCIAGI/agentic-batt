@@ -1,0 +1,90 @@
+{
+  "baseline": "bayesian_optimization",
+  "test_id": 2,
+  "requested_evaluations": 25,
+  "status": "completed",
+  "returncode": 0,
+  "elapsed_seconds": 234.60809087753296,
+  "evaluations": 25,
+  "failed_simulation_evaluations": 0,
+  "best_result": {
+    "timestamp": "20261024_163532",
+    "experiment_type": "sim_vs_sim",
+    "best_parameters": {
+      "Negative electrode Bruggeman coefficient (electrolyte)": 2.499999999999999,
+      "Negative electrode porosity": 0.2,
+      "Negative electrode thickness [m]": 6.675362084035748e-05,
+      "Negative particle radius [m]": 2.5e-06,
+      "Positive electrode Bruggeman coefficient (electrolyte)": 1.3000000000000005,
+      "Positive electrode porosity": 0.2460000000000001,
+      "Positive electrode thickness [m]": 7.188087799971676e-05,
+      "Positive particle radius [m]": 2e-05,
+      "Separator thickness [m]": 3.2500000000000004e-05
+    },
+    "best_objective_value": [
+      {
+        "black_box_output": -0.6930156029030123
+      },
+      {
+        "black_box_output": {
+          "black_box_output": 0.0
+        }
+      }
+    ],
+    "best_trial_index": 22,
+    "best_total_loss": 0.6930156029030123,
+    "best_loss_list": {
+      "capacity": {
+        "loss_name": "capacity",
+        "loss_value": {
+          "cycle_1": {
+            "rmse": 0.14711732246995535,
+            "mape": 3.862925061651866
+          }
+        }
+      },
+      "current": {
+        "loss_name": "current",
+        "loss_value": {
+          "cycle_1": {
+            "rmse": 0.3713284913136395,
+            "mape": 16.50791439244802
+          }
+        }
+      },
+      "voltage": {
+        "loss_name": "voltage",
+        "loss_value": {
+          "cycle_1": {
+            "rmse": 0.17456978911941756,
+            "mape": 3.8159104614540342
+          }
+        }
+      }
+    }
+  },
+  "replay": {
+    "source": "upstream-checkout/runs/baselines_20261024_162720/bayesian_optimization/results/20261024_162807/bo_sim_vs_sim_records.jsonl",
+    "matched_evaluations": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "validation": "All parameter names and values match before each reuse"
+  }
+}

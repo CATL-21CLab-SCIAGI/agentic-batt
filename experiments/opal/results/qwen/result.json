@@ -1,0 +1,25 @@
+{
+  "mode": "ollama",
+  "seed": 0,
+  "epochs": 5,
+  "steps": 2340,
+  "batch_size": 128,
+  "threads": 4,
+  "training_seconds": 920.6179453749792,
+  "final_training_loss": 0.0034351092763245106,
+  "parameter_sha256": "7836e51528c1aec6d42cb4951dad4588462fc439aae468457cba46944676b848",
+  "opal_commit": "8b16759a3e99",
+  "torch_version": "2.14.1",
+  "decisions_requested": 3,
+  "decision_schedule": [
+    [
+      1.0,
+      3
+    ]
+  ],
+  "agent_model": "qwen3.8:27b-opal",
+  "agent_thinking": "medium",
+  "agent_max_output_tokens": 8192,
+  "agent_temperature": 1.0,
+  "agent_wait_seconds": 917.9575758739957
+}

@@ -1,0 +1,29 @@
+{
+  "upstream_url": "https://github.com/opqrst-chen/Battery-Sim-Agent",
+  "upstream_commit": "354f2ddcbb8d14d6dfe9673aac55199976d2d42c",
+  "source_experiment": "runs/local_20261024_162618",
+  "cma_source_experiment": "runs/baselines_20261024_162720",
+  "bo_source_experiment": "runs/baselines_20261024_163521",
+  "source_metrics_sha256": {
+    "runs/local_20261024_162618/summary.json": "3f01aac7e740bb9d7d78a7c6b0fb04a806c6be0bfc335ee788a047dbab853a8d",
+    "runs/local_20261024_162618/single/results/plot/experiments.csv": "1a5a1e55326ea5ce04a6d308d222f8a7aa33aa3229dd311d7c1989b2f518296f",
+    "runs/local_20261024_162618/multi/results/plot/experiments.csv": "372e0f0677c31b03b16d7dc80d618cd1456433d846b11d3e1a8265bc9c4dcb4b",
+    "runs/local_20261024_162618/degradation/results/plot/experiments.csv": "bea233ee681c19fce9e7ea5971c6906dbb1508fdd6be3a8855e4843512a8b900"
+  },
+  "excluded": [
+    "Local llm.yaml credential configuration",
+    "venvs and package caches",
+    "Raw prompts, raw LLM replies and console logs",
+    "Simulated curve data and checkpoints",
+    "Machine-specific absolute paths"
+  ],
+  "checks": [
+    "15 finite agent metric rows matching best metrics",
+    "30 CMA-ES and25 BO records matching sum-RMSE objective",
+    "Per-case completed statuses and exact requested evaluation counts",
+    "Python runners compile and shell wrappers parse",
+    "Compatibility patch applies cleanly to pinned upstream files and exactly matches current source",
+    "All five changed source files equal archived source snapshots for each agent case"
+  ],
+  "reproduction": "setup.sh clones pinned upstream and applies compatibility.patch; run_agent.sh runs3 bounded local Gemma cases; run_baselines.sh runs fresh CMA-ES/BO; archived initial18 BO records are available for optional verified replay. Setup/rerun wrappers were syntax checked, not re-executed with new inference for publication."
+}

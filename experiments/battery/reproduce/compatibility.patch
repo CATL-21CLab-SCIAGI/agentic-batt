@@ -1,0 +1,201 @@
+diff --git a/battery_agent/pipeline.py b/battery_agent/pipeline.py
+index 09620d1..3ab7d72 100644
+--- a/battery_agent/pipeline.py
++++ b/battery_agent/pipeline.py
+@@ -30,7 +30,7 @@ def main():
+     # read yaml file and get specific settings
+     settings = read_yaml(args.yaml_path)
+     ori_settings = None
+-    if args.test_id and isinstance(args.test_id, int):
++    if args.test_id is not None:
+         ori_settings = settings[args.test_id]
+         print(ori_settings)
+ 
+diff --git a/battery_agent/pipeline/degradation_pipeline.py b/battery_agent/pipeline/degradation_pipeline.py
+index 41e4a3d..4572093 100644
+--- a/battery_agent/pipeline/degradation_pipeline.py
++++ b/battery_agent/pipeline/degradation_pipeline.py
+@@ -125,7 +125,7 @@ def degradation_pipeline(
+                 logger.error('Error message:')
+                 logger.error(context)
+             cycle_description += context
+-            if return_loss:
++            if return_loss and is_success:
+                 context_string = "The performance metrics are as follows:\n"
+                 for list_idx, cycle_idx in enumerate(cycle_idxs):
+                     for key, value in loss[list_idx].items():
+@@ -135,6 +135,9 @@ def degradation_pipeline(
+                 # total_loss = loss["Q_mape"] + loss["I_mape"] + loss["V_mape"]
+  
+ 
++        if round_index == search_rounds:
++            break
++
+         from utils.llm import generate_first_cycle_message
+ 
+         # TODO: Change to degradation message
+@@ -156,15 +159,17 @@ def degradation_pipeline(
+                     model_name=model_name,
+                     multi_modal=multi_modal,
+                     search_keys=SEARCH_KEYS,
+-                    round_index=round_index)
++                    round_index=round_index,
++                    prompt_type='DEGREDATION_PROMPT')
+         # other round
+         else:
+             messages = generate_first_cycle_message(
+-                new_params, context,
++                new_params, cycle_description,
+                 image_path=image_path,
+                 multi_modal=multi_modal,
+                 search_keys=SEARCH_KEYS,
+-                round_index=round_index)
++                round_index=round_index,
++                prompt_type='DEGREDATION_PROMPT')
+ 
+         battery_agent_memory.add_messages_memory(messages)
+         logger.info(f"[Info] Message generated.")
+@@ -180,12 +185,14 @@ def degradation_pipeline(
+                                             time_stamp=time_stamp,
+                                             search_keys=SEARCH_KEYS)
+         print(llm_response)
+-        while (not param_groups_list) or (len(param_groups_list) == 0):
++        attempts = 1
++        while not param_groups_list:
+             current_time = time.time()
+             duration = current_time - start_time
+             logger.info(f'duration: {duration}')
+-            if duration > 10000:
+-                return
++            if attempts >= exp_configs.get('MAX_LLM_ATTEMPTS', 5) or duration > 10000:
++                raise RuntimeError("LLM did not return valid parameter groups within the retry budget")
++            attempts += 1
+             time.sleep(3)
+             logger.warning(f"[Warning] No valid parameter groups found.")
+             # retry
+diff --git a/battery_agent/pipeline/first_cycle_pipeline.py b/battery_agent/pipeline/first_cycle_pipeline.py
+index 7388a83..c72e7d9 100644
+--- a/battery_agent/pipeline/first_cycle_pipeline.py
++++ b/battery_agent/pipeline/first_cycle_pipeline.py
+@@ -77,6 +77,7 @@ def first_cycle_pipeline(
+                                         param_name=param_name,
+                                         model_name=model_name,
+                                         target_capacity=None,
++                                        cycle_idxs=cycle_idxs,
+                                         is_plot=True,
+                                         is_save=True,
+                                         save_dir=os.path.join(RESULTS_DIR, "plot"),
+@@ -103,14 +104,18 @@ def first_cycle_pipeline(
+                 logger.error('Error message:')
+                 logger.error(context)
+             cycle_description += context
+-            if return_loss:
++            if return_loss and is_success:
+                 context_string = "The performance metrics are as follows:\n"
+-                for key, value in loss.items():
+-                    context_string += f"{key}: {value}\n"
++                for cycle_idx, metrics in zip(cycle_idxs, loss):
++                    for key, value in metrics.items():
++                        context_string += f"Cycle {cycle_idx} {key}: {value}\n"
+                 cycle_description += context_string
+                 # total_loss = loss["Q_mape"] + loss["I_mape"] + loss["V_mape"]
+  
+ 
++        if round_index == search_rounds:
++            break
++
+         from utils.llm import generate_first_cycle_message
+ 
+         # TODO: need to concat following yaml settings
+@@ -135,7 +140,7 @@ def first_cycle_pipeline(
+         # other round
+         else:
+             messages = generate_first_cycle_message(
+-                new_params, context,
++                new_params, cycle_description,
+                 image_path=image_path,
+                 multi_modal=multi_modal,
+                 search_keys=SEARCH_KEYS,
+@@ -155,12 +160,14 @@ def first_cycle_pipeline(
+                                             time_stamp=time_stamp,
+                                             search_keys=SEARCH_KEYS)
+         print(llm_response)
+-        while (not param_groups_list) or (len(param_groups_list) == 0):
++        attempts = 1
++        while not param_groups_list:
+             current_time = time.time()
+             duration = current_time - start_time
+             logger.info(f'duration: {duration}')
+-            if duration > 10000:
+-                return
++            if attempts >= exp_configs.get('MAX_LLM_ATTEMPTS', 5) or duration > 10000:
++                raise RuntimeError("LLM did not return valid parameter groups within the retry budget")
++            attempts += 1
+             time.sleep(3)
+             logger.warning(f"[Warning] No valid parameter groups found.")
+             # retry
+diff --git a/battery_agent/utils/exp.py b/battery_agent/utils/exp.py
+index 990d110..beff574 100644
+--- a/battery_agent/utils/exp.py
++++ b/battery_agent/utils/exp.py
+@@ -167,7 +167,7 @@ import json
+ def extract_dict(response, src_type='json'):
+     if src_type == 'json':
+         data = json.loads(response)
+-        if len(data.keys()) == 1:
++        if isinstance(data, dict) and len(data) == 1:
+             for key, value in data.items():
+                 if type(value) == str:
+                     match = re.search(r"```json(.*?)```", value, re.DOTALL)
+@@ -207,4 +207,4 @@ def gather_level_dicts(obj, search_keys):
+         # non-iterables are ignored
+ 
+     walk(obj)
+-    return out
+\ No newline at end of file
++    return out
+diff --git a/battery_agent/utils/llm.py b/battery_agent/utils/llm.py
+index 9d18696..729ca3e 100644
+--- a/battery_agent/utils/llm.py
++++ b/battery_agent/utils/llm.py
+@@ -184,13 +184,16 @@ def call_llm(messages, response_format: str = "json_object"):
+     client = openai.OpenAI(base_url=llm_configs["BASE_URL"]
+                            or os.getenv("OPENAI_BASE_URL"),
+                            api_key=llm_configs["API_KEY"]
+-                           or os.getenv("OPENAI_API_KEY"))
++                           or os.getenv("OPENAI_API_KEY"),
++                           timeout=llm_configs.get("TIMEOUT_SECONDS", 120),
++                           max_retries=llm_configs.get("HTTP_MAX_RETRIES", 1))
+     try:
+         response = client.chat.completions.create(
+             model=llm_configs["LLM_MODEL_NAME"],
+             messages=messages,
+             temperature=llm_configs["TEMPERATURE"],
+-            response_format={"type": response_format}
++            response_format={"type": response_format},
++            **({"max_tokens": llm_configs["MAX_TOKENS"]} if "MAX_TOKENS" in llm_configs else {})
+         )
+         res = response.choices[0].message.content
+         logger.info(f"[Info] response: {response}")
+@@ -221,11 +224,20 @@ def call_llm_for_params_to_update(mode: str,
+                           mode="a")
+             logger.info(f"[DEBUG]### LLM Response: {llm_response}")
+             # params_to_update = get_params_from_response(llm_response)
+-            param_groups_list = gather_level_dicts(extract_dict(llm_response), search_keys)
++            try:
++                param_groups_list = gather_level_dicts(extract_dict(llm_response), search_keys)
++            except (ValueError, TypeError, AttributeError) as exc:
++                logger.warning("Invalid parameter response: %s", exc)
++                return llm_response, None
+             # params_to_update = get_first_cycle_params_from_response(
+             #     llm_response)
+             # filter group list
+             param_groups_list = [{k: v for k, v in item.items() if k in search_keys} for item in param_groups_list]
++            import math
++            param_groups_list = [item for item in param_groups_list if item and all(
++                isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
++                for value in item.values()
++            )]
+ 
+             return llm_response, param_groups_list
+         else:

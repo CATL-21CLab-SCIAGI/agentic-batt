@@ -1,0 +1,5 @@
+.venv/
+data/
+local-runs/
+__pycache__/
+.validation/

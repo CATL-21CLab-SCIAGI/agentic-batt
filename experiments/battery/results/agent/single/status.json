@@ -1,0 +1,64 @@
+{
+  "family": "single",
+  "test_id": 2,
+  "cycle_indices_zero_based": [
+    1
+  ],
+  "settings": {
+    "charge_c_rate": 0.2,
+    "discharge_c_rate": 0.2,
+    "model_name": "DFN",
+    "param_name": "Chen2020",
+    "parameter_change": {
+      "Negative electrode thickness [m]": 6.39e-05
+    }
+  },
+  "model": "gemma4:e2b-qat-google",
+  "rounds_requested": 5,
+  "prompt_knowledge": "TEXT_KNOWLEDGE",
+  "status": "completed",
+  "returncode": 0,
+  "elapsed_seconds": 60.99325394630432,
+  "valid_simulation_evaluations": 5,
+  "rounds_attempted": 5,
+  "simulation_evaluations_attempted": 5,
+  "failed_simulation_evaluations": 0,
+  "initial_metrics": {
+    "Q_rmse": 1.252898843092634,
+    "Q_mape": 32.897902548161106,
+    "I_rmse": 0.820039286466863,
+    "I_mape": 35.98108265811995,
+    "V_rmse": 1.698047517616857,
+    "V_mape": 6.355799466429237
+  },
+  "best_metrics": {
+    "Q_rmse": 0.04195412332273074,
+    "Q_mape": 1.1016074188063423,
+    "I_rmse": 0.09166015666067553,
+    "I_mape": 0.9413497624361318,
+    "V_rmse": 0.22615102413842095,
+    "V_mape": 2.2417441661437674
+  },
+  "last_valid_metrics": {
+    "Q_rmse": 0.04195412332273074,
+    "Q_mape": 1.1016074188063423,
+    "I_rmse": 0.09166015666067553,
+    "I_mape": 0.9413497624361318,
+    "V_rmse": 0.22615102413842095,
+    "V_mape": 2.2417441661437674
+  },
+  "best_evaluation": "round_5_sub_0",
+  "best_score_definition": "Q_mape + I_mape + V_mape; percentages, averaged over selected cycles",
+  "best_parameters": {
+    "Negative particle radius [m]": 5.86e-06,
+    "Positive particle radius [m]": 5.22e-06,
+    "Negative electrode thickness [m]": 6.5e-05,
+    "Positive electrode thickness [m]": 5.5e-05,
+    "Negative electrode porosity": 0.28,
+    "Positive electrode porosity": 0.31,
+    "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+    "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+    "Separator thickness [m]": 1.2e-05
+  },
+  "llm_responses": 4
+}

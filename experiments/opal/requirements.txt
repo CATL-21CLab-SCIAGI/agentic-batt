@@ -1,0 +1,4 @@
+torch==2.14.1
+torchvision==0.29.1
+numpy==2.4.6
+opal-optimizer @ git+https://github.com/xingjian-bai/opal.git@8b16759a3e9930916ed582e28068267859f935f8

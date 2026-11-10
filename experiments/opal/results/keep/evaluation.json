@@ -1,0 +1,6 @@
+{
+  "test_accuracy": 0.984499990940094,
+  "test_loss": 0.051185984164476395,
+  "test_examples": 10000,
+  "separate_evaluation_process": true
+}

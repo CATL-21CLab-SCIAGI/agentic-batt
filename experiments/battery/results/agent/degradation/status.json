@@ -1,0 +1,63 @@
+{
+  "family": "degradation",
+  "test_id": 0,
+  "cycle_indices_zero_based": [
+    1,
+    4,
+    9
+  ],
+  "settings": {
+    "charge_c_rate": 1,
+    "discharge_c_rate": 1,
+    "model_name": "DFN",
+    "param_name": "Chen2020",
+    "parameter_change": {
+      "SEI reaction exchange current density [A.m-2]": 3e-07
+    }
+  },
+  "model": "gemma4:e2b-qat-google",
+  "rounds_requested": 5,
+  "prompt_knowledge": "TEXT_KNOWLEDGE",
+  "status": "completed",
+  "returncode": 0,
+  "elapsed_seconds": 47.99513030052185,
+  "valid_simulation_evaluations": 5,
+  "rounds_attempted": 5,
+  "simulation_evaluations_attempted": 5,
+  "failed_simulation_evaluations": 0,
+  "initial_metrics": {
+    "Q_rmse": 0.0037848117178069054,
+    "Q_mape": 0.0768267883620965,
+    "I_rmse": 0.08537074213726036,
+    "I_mape": 0.06315597072643016,
+    "V_rmse": 0.03873761959959412,
+    "V_mape": 0.02437076540456129
+  },
+  "best_metrics": {
+    "Q_rmse": 0.0037848117178069054,
+    "Q_mape": 0.0768267883620965,
+    "I_rmse": 0.08537074213726036,
+    "I_mape": 0.06315597072643016,
+    "V_rmse": 0.03873761959959412,
+    "V_mape": 0.02437076540456129
+  },
+  "last_valid_metrics": {
+    "Q_rmse": 0.0032084383548118822,
+    "Q_mape": 0.06513064936828501,
+    "I_rmse": 0.20136113417122278,
+    "I_mape": 0.20086161266870148,
+    "V_rmse": 0.08407138491665718,
+    "V_mape": 0.05097101878137774
+  },
+  "best_evaluation": "round_1_sub_0",
+  "best_score_definition": "Q_mape + I_mape + V_mape; percentages, averaged over selected cycles",
+  "best_parameters": {
+    "SEI reaction exchange current density [A.m-2]": 1.5e-07,
+    "SEI resistivity [Ohm.m]": 200000.0,
+    "SEI solvent diffusivity [m2.s-1]": 2.5e-22,
+    "SEI open-circuit potential [V]": 0.4,
+    "Ambient temperature [K]": 298.15,
+    "Initial temperature [K]": 298.15
+  },
+  "llm_responses": 4
+}

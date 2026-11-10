@@ -1,0 +1,9 @@
+{"kind": "start", "utc": "2026-10-25T16:45:26+00:00", "goal": "3-layer MLP on MNIST; judged by test accuracy after the last update", "total_updates": 2340, "world": 1, "blocking": true, "schedule": [600, 1200, 1800], "backend": "keep", "version": 0}
+{"kind": "audit", "utc": "2026-10-25T16:45:26+00:00", "update": 2, "version": 0, "operator_calls": 60}
+{"kind": "requested", "utc": "2026-10-25T16:45:26+00:00", "k": 1, "update": 600, "reasons": ["scheduled decision"]}
+{"kind": "kept", "utc": "2026-10-25T16:45:26+00:00", "k": 1, "requested_at": 600, "applied_at": 600, "lag_updates": 0, "seconds": 0.0, "cost_usd": 0.0}
+{"kind": "requested", "utc": "2026-10-25T16:45:27+00:00", "k": 2, "update": 1200, "reasons": ["scheduled decision"]}
+{"kind": "kept", "utc": "2026-10-25T16:45:27+00:00", "k": 2, "requested_at": 1200, "applied_at": 1200, "lag_updates": 0, "seconds": 0.0, "cost_usd": 0.0}
+{"kind": "requested", "utc": "2026-10-25T16:45:28+00:00", "k": 3, "update": 1800, "reasons": ["scheduled decision"]}
+{"kind": "kept", "utc": "2026-10-25T16:45:28+00:00", "k": 3, "requested_at": 1800, "applied_at": 1800, "lag_updates": 0, "seconds": 0.0, "cost_usd": 0.0}
+{"kind": "end", "utc": "2026-10-25T16:45:28+00:00", "update": 2340, "version": 0, "decisions": 3, "cost_usd": 0.0, "unknown_cost_decisions": [], "agent_wait_seconds": 0.0}

@@ -1,0 +1,7 @@
+-r requirements.txt
+openai==1.99.9
+ax-platform==0.5.0
+cma==4.5.0
+# Ax 0.5 mutates NumPy views returned by pandas; pandas 3 makes them read-only.
+pandas==2.2.3
+scikit-learn

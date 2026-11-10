@@ -1,0 +1,3 @@
+FROM qwen3.8:27b-harness-fixed
+RENDERER qwen3.8
+PARSER qwen3.5

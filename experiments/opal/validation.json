@@ -1,0 +1,8 @@
+{
+  "verified_on": "2026-11-10",
+  "numeric_records": "All 2340 loss rows per completed run, baseline/keep/Gemma identities, pre-intervention prefix, metrics, and decision counts verified by verify_results.py.",
+  "relocated_runner": "Executed all five epochs of plain control from packaged directory using existing MNIST cache. All 2340 loss records and final parameter hash exactly match the archived baseline.",
+  "python_compile": "All packaged top-level Python files parsed and compiled successfully.",
+  "network_or_agent_reexecution": false,
+  "fresh_environment_install": "Not repeated; pinned versions copied from original working environment."
+}

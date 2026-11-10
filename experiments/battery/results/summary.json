@@ -1,0 +1,379 @@
+{
+  "upstream_commit": "354f2ddcbb8d14d6dfe9673aac55199976d2d42c",
+  "model": "gemma4:e2b-qat-google",
+  "scope": "Recorded bounded local pilot, 2026-10-24; not the full paper benchmark. Battery calibration and OPAL training are separate tasks.",
+  "cases": [
+    {
+      "family": "single",
+      "test_id": 2,
+      "cycle_indices_zero_based": [
+        1
+      ],
+      "settings": {
+        "charge_c_rate": 0.2,
+        "discharge_c_rate": 0.2,
+        "model_name": "DFN",
+        "param_name": "Chen2020",
+        "parameter_change": {
+          "Negative electrode thickness [m]": 6.39e-05
+        }
+      },
+      "model": "gemma4:e2b-qat-google",
+      "rounds_requested": 5,
+      "prompt_knowledge": "TEXT_KNOWLEDGE",
+      "status": "completed",
+      "returncode": 0,
+      "elapsed_seconds": 60.99325394630432,
+      "valid_simulation_evaluations": 5,
+      "rounds_attempted": 5,
+      "simulation_evaluations_attempted": 5,
+      "failed_simulation_evaluations": 0,
+      "initial_metrics": {
+        "Q_rmse": 1.252898843092634,
+        "Q_mape": 32.897902548161106,
+        "I_rmse": 0.820039286466863,
+        "I_mape": 35.98108265811995,
+        "V_rmse": 1.698047517616857,
+        "V_mape": 6.355799466429237
+      },
+      "best_metrics": {
+        "Q_rmse": 0.04195412332273074,
+        "Q_mape": 1.1016074188063423,
+        "I_rmse": 0.09166015666067553,
+        "I_mape": 0.9413497624361318,
+        "V_rmse": 0.22615102413842095,
+        "V_mape": 2.2417441661437674
+      },
+      "last_valid_metrics": {
+        "Q_rmse": 0.04195412332273074,
+        "Q_mape": 1.1016074188063423,
+        "I_rmse": 0.09166015666067553,
+        "I_mape": 0.9413497624361318,
+        "V_rmse": 0.22615102413842095,
+        "V_mape": 2.2417441661437674
+      },
+      "best_evaluation": "round_5_sub_0",
+      "best_score_definition": "Q_mape + I_mape + V_mape; percentages, averaged over selected cycles",
+      "best_parameters": {
+        "Negative particle radius [m]": 5.86e-06,
+        "Positive particle radius [m]": 5.22e-06,
+        "Negative electrode thickness [m]": 6.5e-05,
+        "Positive electrode thickness [m]": 5.5e-05,
+        "Negative electrode porosity": 0.28,
+        "Positive electrode porosity": 0.31,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Separator thickness [m]": 1.2e-05
+      },
+      "llm_responses": 4
+    },
+    {
+      "family": "multi",
+      "test_id": 4,
+      "cycle_indices_zero_based": [
+        1
+      ],
+      "settings": {
+        "charge_c_rate": 0.2,
+        "discharge_c_rate": 0.2,
+        "model_name": "DFN",
+        "param_name": "Chen2020",
+        "parameter_change": {
+          "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+          "Negative electrode porosity": 0.31,
+          "Negative electrode thickness [m]": 9.372e-05,
+          "Negative particle radius [m]": 5.86e-06,
+          "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+          "Positive electrode porosity": 0.395,
+          "Positive electrode thickness [m]": 8.316e-05,
+          "Positive particle radius [m]": 5.22e-06,
+          "Separator thickness [m]": 1.2e-05
+        }
+      },
+      "model": "gemma4:e2b-qat-google",
+      "rounds_requested": 5,
+      "prompt_knowledge": "TEXT_KNOWLEDGE",
+      "status": "completed",
+      "returncode": 0,
+      "elapsed_seconds": 36.648133754730225,
+      "valid_simulation_evaluations": 5,
+      "rounds_attempted": 5,
+      "simulation_evaluations_attempted": 5,
+      "failed_simulation_evaluations": 0,
+      "initial_metrics": {
+        "Q_rmse": 0.5094743827033916,
+        "Q_mape": 9.145412281326184,
+        "I_rmse": 0.4714270273383898,
+        "I_mape": 23.765756561829722,
+        "V_rmse": 0.9624236108281807,
+        "V_mape": 11.63416775844884
+      },
+      "best_metrics": {
+        "Q_rmse": 0.07268826681937757,
+        "Q_mape": 1.304803912908936,
+        "I_rmse": 0.15010566593751887,
+        "I_mape": 1.6733622063636515,
+        "V_rmse": 0.30303914997605985,
+        "V_mape": 0.5286416146305446
+      },
+      "last_valid_metrics": {
+        "Q_rmse": 0.18766568634701297,
+        "Q_mape": 3.3687269291038575,
+        "I_rmse": 0.2506345265638539,
+        "I_mape": 4.584884086327604,
+        "V_rmse": 0.5160532927597973,
+        "V_mape": 1.219836876108678
+      },
+      "best_evaluation": "round_4_sub_0",
+      "best_score_definition": "Q_mape + I_mape + V_mape; percentages, averaged over selected cycles",
+      "best_parameters": {
+        "Negative particle radius [m]": 5.86e-06,
+        "Positive particle radius [m]": 5.22e-06,
+        "Negative electrode thickness [m]": 9.5e-05,
+        "Positive electrode thickness [m]": 8.2e-05,
+        "Negative electrode porosity": 0.31,
+        "Positive electrode porosity": 0.39,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.68,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.62,
+        "Separator thickness [m]": 1.2e-05
+      },
+      "llm_responses": 4
+    },
+    {
+      "family": "degradation",
+      "test_id": 0,
+      "cycle_indices_zero_based": [
+        1,
+        4,
+        9
+      ],
+      "settings": {
+        "charge_c_rate": 1,
+        "discharge_c_rate": 1,
+        "model_name": "DFN",
+        "param_name": "Chen2020",
+        "parameter_change": {
+          "SEI reaction exchange current density [A.m-2]": 3e-07
+        }
+      },
+      "model": "gemma4:e2b-qat-google",
+      "rounds_requested": 5,
+      "prompt_knowledge": "TEXT_KNOWLEDGE",
+      "status": "completed",
+      "returncode": 0,
+      "elapsed_seconds": 47.99513030052185,
+      "valid_simulation_evaluations": 5,
+      "rounds_attempted": 5,
+      "simulation_evaluations_attempted": 5,
+      "failed_simulation_evaluations": 0,
+      "initial_metrics": {
+        "Q_rmse": 0.0037848117178069054,
+        "Q_mape": 0.0768267883620965,
+        "I_rmse": 0.08537074213726036,
+        "I_mape": 0.06315597072643016,
+        "V_rmse": 0.03873761959959412,
+        "V_mape": 0.02437076540456129
+      },
+      "best_metrics": {
+        "Q_rmse": 0.0037848117178069054,
+        "Q_mape": 0.0768267883620965,
+        "I_rmse": 0.08537074213726036,
+        "I_mape": 0.06315597072643016,
+        "V_rmse": 0.03873761959959412,
+        "V_mape": 0.02437076540456129
+      },
+      "last_valid_metrics": {
+        "Q_rmse": 0.0032084383548118822,
+        "Q_mape": 0.06513064936828501,
+        "I_rmse": 0.20136113417122278,
+        "I_mape": 0.20086161266870148,
+        "V_rmse": 0.08407138491665718,
+        "V_mape": 0.05097101878137774
+      },
+      "best_evaluation": "round_1_sub_0",
+      "best_score_definition": "Q_mape + I_mape + V_mape; percentages, averaged over selected cycles",
+      "best_parameters": {
+        "SEI reaction exchange current density [A.m-2]": 1.5e-07,
+        "SEI resistivity [Ohm.m]": 200000.0,
+        "SEI solvent diffusivity [m2.s-1]": 2.5e-22,
+        "SEI open-circuit potential [V]": 0.4,
+        "Ambient temperature [K]": 298.15,
+        "Initial temperature [K]": 298.15
+      },
+      "llm_responses": 4
+    }
+  ],
+  "baselines": [
+    {
+      "baseline": "cma_es_single",
+      "test_id": 2,
+      "requested_evaluations": 30,
+      "status": "completed",
+      "returncode": 0,
+      "elapsed_seconds": 525.9135050773621,
+      "evaluations": 30,
+      "failed_simulation_evaluations": 0,
+      "best_result": {
+        "timestamp": "20261024_162757",
+        "experiment_type": "sim_vs_sim",
+        "best_parameters": {
+          "Negative electrode Bruggeman coefficient (electrolyte)": 1.9239841982735926,
+          "Negative electrode porosity": 0.2136758324170267,
+          "Negative electrode thickness [m]": 6.472617038977753e-05,
+          "Negative particle radius [m]": 1.2393429819299355e-05,
+          "Positive electrode Bruggeman coefficient (electrolyte)": 1.66914855957366,
+          "Positive electrode porosity": 0.4652393613254507,
+          "Positive electrode thickness [m]": 8.347052064611762e-05,
+          "Positive particle radius [m]": 7.863370053282891e-07,
+          "Separator thickness [m]": 1.3875038691430048e-05
+        },
+        "best_total_loss": 0.2123835702513215,
+        "best_trial_index": "gen_2_subtrial_5",
+        "best_loss_list": {
+          "capacity": {
+            "loss_name": "capacity",
+            "loss_value": {
+              "cycle_1": {
+                "rmse": 0.015464804053764603,
+                "mape": 0.40606624801115976
+              }
+            }
+          },
+          "current": {
+            "loss_name": "current",
+            "loss_value": {
+              "cycle_1": {
+                "rmse": 0.06210161282332775,
+                "mape": 0.8048745327478318
+              }
+            }
+          },
+          "voltage": {
+            "loss_name": "voltage",
+            "loss_value": {
+              "cycle_1": {
+                "rmse": 0.13481715337422917,
+                "mape": 1.2785021526239237
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "baseline": "bayesian_optimization",
+      "test_id": 2,
+      "requested_evaluations": 25,
+      "status": "completed",
+      "returncode": 0,
+      "elapsed_seconds": 234.60809087753296,
+      "evaluations": 25,
+      "failed_simulation_evaluations": 0,
+      "best_result": {
+        "timestamp": "20261024_163532",
+        "experiment_type": "sim_vs_sim",
+        "best_parameters": {
+          "Negative electrode Bruggeman coefficient (electrolyte)": 2.499999999999999,
+          "Negative electrode porosity": 0.2,
+          "Negative electrode thickness [m]": 6.675362084035748e-05,
+          "Negative particle radius [m]": 2.5e-06,
+          "Positive electrode Bruggeman coefficient (electrolyte)": 1.3000000000000005,
+          "Positive electrode porosity": 0.2460000000000001,
+          "Positive electrode thickness [m]": 7.188087799971676e-05,
+          "Positive particle radius [m]": 2e-05,
+          "Separator thickness [m]": 3.2500000000000004e-05
+        },
+        "best_objective_value": [
+          {
+            "black_box_output": -0.6930156029030123
+          },
+          {
+            "black_box_output": {
+              "black_box_output": 0.0
+            }
+          }
+        ],
+        "best_trial_index": 22,
+        "best_total_loss": 0.6930156029030123,
+        "best_loss_list": {
+          "capacity": {
+            "loss_name": "capacity",
+            "loss_value": {
+              "cycle_1": {
+                "rmse": 0.14711732246995535,
+                "mape": 3.862925061651866
+              }
+            }
+          },
+          "current": {
+            "loss_name": "current",
+            "loss_value": {
+              "cycle_1": {
+                "rmse": 0.3713284913136395,
+                "mape": 16.50791439244802
+              }
+            }
+          },
+          "voltage": {
+            "loss_name": "voltage",
+            "loss_value": {
+              "cycle_1": {
+                "rmse": 0.17456978911941756,
+                "mape": 3.8159104614540342
+              }
+            }
+          }
+        }
+      },
+      "replay": {
+        "source": "upstream-checkout/runs/baselines_20261024_162720/bayesian_optimization/results/20261024_162807/bo_sim_vs_sim_records.jsonl",
+        "matched_evaluations": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "validation": "All parameter names and values match before each reuse"
+      },
+      "verified_model_based_evaluations": 7
+    }
+  ],
+  "validation": {
+    "agent_cases_completed": 3,
+    "agent_valid_evaluations": 15,
+    "llm_responses": 12,
+    "cma_es_evaluations": 30,
+    "bo_evaluations": 25,
+    "bo_replayed_evaluations": 18,
+    "bo_new_model_based_evaluations": 7,
+    "note": "Different evaluation budgets and objectives; these pilot runs are not a controlled comparison."
+  },
+  "baseline_dependency_fix": "Ax 0.5 requires pandas <3 for mutable observation arrays; baseline environment pinned to pandas 2.2.3.",
+  "publication_notes": [
+    "Agent best score uses sum of Q/I/V MAPEs averaged across selected cycles; baselines optimize sum of Q/I/V RMSE, which adds different physical units. These are native objectives, not a common ranking metric.",
+    "Five agent evaluations include one initial point and four LLM proposals per case.",
+    "Single and multi labels refer to target parameter perturbations; the first-cycle agent can change nine parameters in both cases.",
+    "Degradation best score is the initial point: no combined-score improvement was observed.",
+    "BO final-stage elapsed time includes replay overhead plus seven new evaluations, not the full cost of all25 simulations. Earlier attempts are omitted from that wall-time number.",
+    "CMA-ES and BO are single-target test2 pilots with different evaluation budgets from the agent; no controlled method comparison."
+  ],
+  "upstream_url": "https://github.com/opqrst-chen/Battery-Sim-Agent",
+  "result_files": {
+    "agent_curve": "results/agent/trajectory.csv",
+    "baseline_curve": "results/baselines/trajectory.csv"
+  }
+}
