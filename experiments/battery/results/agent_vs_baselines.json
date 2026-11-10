@@ -1,0 +1,39 @@
+{
+  "target": "single-parameter target, test_id=2, zero-based cycle index 1",
+  "reporting_metrics": [
+    "Q_mape + I_mape + V_mape (%)",
+    "Q_rmse + I_rmse + V_rmse (mixed physical units)"
+  ],
+  "selection": "Minimum reporting metric over all recorded candidates up to the stated evaluation count",
+  "methods": {
+    "Gemma agent": {
+      "evaluations": 5,
+      "best_first5_sum_mape": 4.284701347386241,
+      "best_full_sum_mape": 4.284701347386241,
+      "best_first5_sum_rmse": 0.3597653041218272,
+      "best_full_sum_rmse": 0.3597653041218272
+    },
+    "CMA-ES": {
+      "evaluations": 30,
+      "best_first5_sum_mape": 52.37560530498903,
+      "best_full_sum_mape": 2.4894429333829153,
+      "best_first5_sum_rmse": 3.040580549505126,
+      "best_full_sum_rmse": 0.2123835702513215
+    },
+    "Bayesian optimization": {
+      "evaluations": 25,
+      "best_first5_sum_mape": 58.68667367715295,
+      "best_full_sum_mape": 8.749365241938852,
+      "best_first5_sum_rmse": 2.102915811827568,
+      "best_full_sum_rmse": 0.6930156029030123
+    }
+  },
+  "limitations": [
+    "One trajectory per method; no repeated-seed estimate.",
+    "Initial candidates differ; Gemma receives physics hints and structured feedback.",
+    "CMA-ES population is 6; BO evaluations 1-18 are Sobol initialization.",
+    "The first-five slice is descriptive, not a new matched-budget rerun.",
+    "Gemma has no measurements after evaluation 5.",
+    "BO includes 18 parameter-validated replayed observations and 7 new evaluations."
+  ]
+}

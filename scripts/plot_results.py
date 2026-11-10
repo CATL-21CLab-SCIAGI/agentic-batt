@@ -123,6 +123,53 @@ def battery():
     save(fig, 'battery_baseline_convergence')
 
 
+def battery_comparison():
+    root = ROOT / 'experiments/battery/results'
+    with (root / 'agent/trajectory.csv').open() as f:
+        agent = [r for r in csv.DictReader(f) if r['family'] == 'single']
+    with (root / 'baselines/trajectory.csv').open() as f:
+        baselines = list(csv.DictReader(f))
+    groups = [('Gemma agent', agent, GREEN),
+              ('CMA-ES', [r for r in baselines if r['method'] == 'cma_es_single'], BLUE),
+              ('Bayesian optimization', [r for r in baselines if r['method'] == 'bayesian_optimization'], ORANGE)]
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.2), layout='constrained')
+    metrics = {}
+    for label, group, color in groups:
+        assert all(int(r['test_id']) == 2 for r in group)
+        x = np.array([int(r['evaluation']) for r in group])
+        metrics[label] = {'evaluations': len(group)}
+        plot_label = {'Gemma agent': 'Gemma (5 evaluations)', 'CMA-ES': 'CMA-ES (30)',
+                      'Bayesian optimization': 'BO (25; 18 replayed)'}[label]
+        for ax, metric in zip(axes, ['mape', 'rmse']):
+            score = np.array([sum(float(r[f'{c}_{metric}']) for c in ['Q', 'I', 'V']) for r in group])
+            best = np.minimum.accumulate(score)
+            metrics[label][f'best_first5_sum_{metric}'] = float(best[4])
+            metrics[label][f'best_full_sum_{metric}'] = float(best[-1])
+            ax.step(x, best, where='post', label=plot_label, color=color, lw=2.4)
+            ax.scatter(x[-1], best[-1], color=color, s=40, zorder=3)
+    axes[0].set(title='Sum of MAPEs (%)', ylabel='Best so far: Sum of MAPEs (%)')
+    axes[1].set(title='Sum of RMSEs (mixed physical units)', ylabel='Best so far: Sum of RMSEs (mixed physical units)')
+    for ax in axes:
+        ax.set(yscale='log', xlabel='Simulation evaluation')
+        ax.legend(frameon=False, fontsize=10)
+        ax.grid(alpha=.15)
+    fig.suptitle('Same battery target: Gemma, CMA-ES and Bayesian optimization', fontsize=15)
+    fig.supxlabel('Each panel selects the best observed value of its own metric. Different search objectives; one pilot per method. Gemma stops at evaluation 5.', fontsize=9)
+    save(fig, 'battery_all_methods')
+    record = {'target': 'single-parameter target, test_id=2, zero-based cycle index 1',
+              'reporting_metrics': ['Q_mape + I_mape + V_mape (%)', 'Q_rmse + I_rmse + V_rmse (mixed physical units)'],
+              'selection': 'Minimum reporting metric over all recorded candidates up to the stated evaluation count',
+              'methods': metrics,
+              'limitations': ['One trajectory per method; no repeated-seed estimate.',
+                              'Initial candidates differ; Gemma receives physics hints and structured feedback.',
+                              'CMA-ES population is 6; BO evaluations 1-18 are Sobol initialization.',
+                              'The first-five slice is descriptive, not a new matched-budget rerun.',
+                              'Gemma has no measurements after evaluation 5.',
+                              'BO includes 18 parameter-validated replayed observations and 7 new evaluations.']}
+    (root / 'agent_vs_baselines.json').write_text(json.dumps(record, indent=2) + '\n')
+
+
 if __name__ == '__main__':
     opal()
     battery()
+    battery_comparison()

@@ -49,7 +49,19 @@ for method, count in [('cma_es_single', 30), ('bayesian_optimization', 25)]:
     assert math.isclose(best, record['best_result']['best_total_loss'])
 assert sum(r['replayed'].lower() == 'true' for r in baselines) == 18
 
-for name in ['opal_results', 'battery_agent_convergence', 'battery_baseline_convergence', 'agent_overhead_projection']:
+comparison = json.loads((battery / 'agent_vs_baselines.json').read_text())
+groups = [('Gemma agent', [r for r in agent if r['family'] == 'single']),
+          ('CMA-ES', [r for r in baselines if r['method'] == 'cma_es_single']),
+          ('Bayesian optimization', [r for r in baselines if r['method'] == 'bayesian_optimization'])]
+for method, group in groups:
+    report = comparison['methods'][method]
+    assert report['evaluations'] == len(group)
+    for metric in ['mape', 'rmse']:
+        scores = [sum(float(r[f'{c}_{metric}']) for c in ['Q', 'I', 'V']) for r in group]
+        assert math.isclose(report[f'best_first5_sum_{metric}'], min(scores[:5]))
+        assert math.isclose(report[f'best_full_sum_{metric}'], min(scores))
+
+for name in ['opal_results', 'battery_agent_convergence', 'battery_baseline_convergence', 'agent_overhead_projection', 'battery_all_methods']:
     for ext in ['png', 'svg']:
         assert (ROOT / 'plots' / f'{name}.{ext}').stat().st_size > 1000
 for doc in [ROOT / 'README.md', ROOT / 'THIRD_PARTY_NOTICES.md', ROOT / 'docs/reproduction.md']:

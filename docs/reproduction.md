@@ -10,6 +10,16 @@ python3.11 scripts/verify_results.py
 
 This checks the recorded metrics, all 2,340 OPAL losses per run, matched controls, decision counts, source hashes, and battery evaluation trajectories without loading a model or dataset. The archived result summaries contain runtime, parameters, objectives, and limitations. The plots are reproducible from committed JSON/CSV records using the commands in the root README.
 
+To install the plotting environment and regenerate all five figures:
+
+```sh
+python3.11 -m venv .venv-plots
+.venv-plots/bin/python -m pip install -r requirements-plots.txt
+.venv-plots/bin/python scripts/plot_results.py
+```
+
+The combined battery figure reports independent best-so-far sums of MAPE and RMSE on the single-parameter target. A method's best candidate may differ between panels. Each trajectory ends at its recorded budget; Gemma is not extrapolated beyond five evaluations. Initialization and feedback differ across methods: CMA-ES uses populations of six, BO starts with 18 Sobol evaluations, and Gemma receives physics guidance and sequential diagnostic feedback.
+
 ## Battery simulation
 
 ```sh
