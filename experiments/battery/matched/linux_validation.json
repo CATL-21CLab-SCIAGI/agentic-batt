@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-10",
+  "status": "passed",
+  "source_commit": "6a5aa7b766e5e0c4db3ff60733c0ab6d2e70724b",
+  "platform": "Linux",
+  "python": "3.11.12",
+  "common_initial_sum_rmse": {
+    "cma": 3.7709856471767935,
+    "bo": 3.7709856471767935,
+    "archived_pilot_reference": 3.770985647176354,
+    "agreement_relative_tolerance": 1e-10
+  },
+  "bo_synthetic_smoke": {
+    "evaluations": 4,
+    "generated_sobol_points": 1,
+    "gp_acquisition_steps": 2,
+    "resume_added_evaluations": 0,
+    "is_battery_result": false
+  },
+  "packages": {
+    "numpy": "1.26.4",
+    "pybamm": "25.6.0",
+    "cma": "4.5.0",
+    "ax-platform": "0.5.0",
+    "torch": "2.8.0+cpu",
+    "pandas": "2.2.3",
+    "botorch": "0.13.0",
+    "gpytorch": "1.14",
+    "casadi": "3.6.7",
+    "pybammsolvers": "0.3.3"
+  }
+}

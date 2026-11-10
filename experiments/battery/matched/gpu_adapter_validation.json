@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-10",
+  "status": "passed",
+  "runner_sha256": "35c6d3c3431cb8a1693b2c927bf5ebc406141ffee1985093fb40f612ccc755d3",
+  "gpu": "NVIDIA L20D",
+  "ollama_version": "0.33.2",
+  "parameter_encoding": "regex-constrained plain decimal strings, exact bounds check, then float conversion",
+  "models": [
+    {"model": "gemma4:e2b-qat-google", "seed": 0, "valid_simulations": 2, "shared_initial_evaluations": 1, "agent_proposals": 1, "inference_attempts": 1},
+    {"model": "qwen3.8:27b-opal", "seed": 0, "valid_simulations": 2, "shared_initial_evaluations": 1, "agent_proposals": 1, "inference_attempts": 1}
+  ],
+  "counts_toward_campaign_budget": false,
+  "purpose": "Deployment diagnostic only; fresh campaign starts with no reused observations.",
+  "earlier_attempt": "Numeric JSON proposals contained incorrect exponents and failed bounds validation. That attempt was stopped and preserved separately."
+}

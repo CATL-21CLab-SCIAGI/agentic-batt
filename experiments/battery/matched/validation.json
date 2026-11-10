@@ -4,17 +4,17 @@
   "live_agent_inference_run": false,
   "large_campaign_run_locally": false,
   "checks": [
-    "Four focused contract tests passed: strict bounds, model JSON repair before simulator invocation, interruption accounting and idempotent resume across a CMA generation, and append-only inference attempt archives/counts across proposal resumption.",
+    "Six focused contract tests passed: strict physical bounds, decimal JSON numeric round trips, strict decimal-string parameter conversion including exact boundary checks, decoded-value proposal repair before simulation, interruption accounting and idempotent CMA resume, and append-only inference archives/counts across proposal resumption.",
     "Real PyBaMM common initial-point evaluations under both CMA and BO equal archived pilot initialization exactly.",
     "Synthetic BO smoke exercised attached initial point, Sobol generation, two GP acquisition steps, checkpoint serialization and no-additional-evaluation resume."
   ],
   "common_initial_sum_rmse": 3.770985647176354,
   "bo_smoke_objective": "synthetic unit-box quadratic, not battery evidence",
   "source_sha256": {
-    "run.py": "ee6d494e9cd377baac0612071192682ed9caa61c83024d017f8ccd75bd28fc06",
+    "run.py": "35c6d3c3431cb8a1693b2c927bf5ebc406141ffee1985093fb40f612ccc755d3",
     "simulator_worker.py": "bc9a2a612105687775e3126584a6cbe913d6506a64284d6c429d89594903033d",
     "spec.json": "46315aa8759f41e262abaecbd148d58e10397aac5a6ed7723aefcad79a080553",
-    "test_runner.py": "39779ad2baa7d48f8d7ec2c44647ab085a029557d97195bc7f1e3d6181c2b0c1"
+    "test_runner.py": "163460042cd49ae8685ddc7da4c1d3460af4a9857540874396c7572867eb222c"
   },
   "local_test_environment": {
     "python": "3.11.16",
@@ -29,5 +29,6 @@
     "casadi": "3.6.7",
     "pybammsolvers": "0.3.3"
   },
-  "deployment_environment": "DLC bootstrap separately validates Linux CPU-only torch2.8.0+cpu; Ollama serves models on GPU."
+  "deployment_environment": "DLC bootstrap separately validates Linux CPU-only torch2.8.0+cpu; Ollama serves models on GPU.",
+  "numeric_format_adapter": "Both agents use the same regex-constrained decimal-string output schema. Raw numbers, exponent strings, malformed strings and out-of-bounds decimals are rejected. Decimal bounds are checked exactly before conversion to finite simulator floats, with no clipping or guessed repair. Prompt and diagnostic numeric formatting remains plain decimal. Live GPU validation is separate."
 }

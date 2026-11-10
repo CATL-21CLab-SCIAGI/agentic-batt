@@ -28,6 +28,8 @@ Both agents receive the same objective, bounds, authored upstream physics hints,
 
 Invalid model proposals receive up to three attempts before any simulation. Requests, responses, rejected attempts, and timings are saved. Exhausted attempts stop that run with a visible failure; they do not create invented simulation results. Interrupted simulator calls consume a reserved slot when resumed. Target-data generation and basic GPU inference checks are outside optimizer budgets and recorded separately.
 
+Both agents return parameter values as regex-constrained plain decimal strings. The adapter checks their exact decimal values against the bounds before converting them to simulator floats; it never guesses exponents or clips proposals. This addresses an observed first-attempt formatting failure: Gemma explained `5.86e-06` in its rationale but emitted `5.86e-0` in a numeric JSON field. That attempt is retained separately and excluded from the fresh comparison. The correction changes the interface representation, not the physical bounds, objective, or evaluation allowance.
+
 ## Deployment and reproduction
 
 The [one-GPU launcher](../cloud/README.md) verifies the persistent mount, exact model weight hashes, GPU placement, and successful inference before starting the campaign. Ollama serves only on localhost. Account, quota, network, and storage identifiers stay outside this public repository. Linux uses Python 3.11, PyBaMM 25.6.0, CPU PyTorch 2.8.0, and Ollama 0.33.2; the pilot used Ollama 0.32.13.
@@ -43,6 +45,6 @@ python experiments/battery/matched/run.py \
 
 Add `--resume` only for the same saved campaign and configuration. Each method/seed saves evaluation JSON, a trajectory, status, inference logs, and optimizer state. Resume state is trusted local pickle data and should not be loaded from untrusted sources. Raw checkpoints, model weights, environments, and private deployment records are excluded from Git.
 
-[Local validation](../experiments/battery/matched/validation.json) covers budget accounting, proposal validation, real initial-point agreement, and BO's transition to GP acquisition. [Deployment status](../experiments/battery/matched/launch_status.json) reports the latest verified cloud observation. A running job or a GPU smoke check is not a completed optimizer result.
+[Local validation](../experiments/battery/matched/validation.json) covers budget accounting, proposal validation, real initial-point agreement, and BO's transition to GP acquisition. [Linux validation](../experiments/battery/matched/linux_validation.json) confirms the prepared environment's real initial scores and BO acquisition/checkpoint behavior. The [GPU adapter diagnostic](../experiments/battery/matched/gpu_adapter_validation.json) verifies one real proposal and simulation from each corrected agent. [Deployment status](../experiments/battery/matched/launch_status.json) reports the latest verified cloud observation. A running job or a GPU smoke check is not a completed optimizer result.
 
 The planned comparison reports all three seeds, failed evaluations, and best-so-far RMSE/MAPE against both evaluation count and elapsed time. Additional simulator budget alone cannot establish an agent advantage; any conclusion remains limited to this target, these models, and this protocol.

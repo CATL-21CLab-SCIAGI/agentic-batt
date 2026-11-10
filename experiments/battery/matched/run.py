@@ -6,6 +6,7 @@ and are counted separately; exhausted repair attempts stop that run visibly.
 """
 import argparse
 import datetime as dt
+from decimal import Decimal
 import hashlib
 import importlib.metadata
 import json
@@ -14,6 +15,7 @@ import os
 from pathlib import Path
 import pickle
 import random
+import re
 import subprocess
 import sys
 import time
@@ -21,6 +23,7 @@ import urllib.parse
 import urllib.request
 
 HERE = Path(__file__).resolve().parent
+DECIMAL_PARAMETER_PATTERN = r'^(0|[1-9][0-9]*)(\.[0-9]+)?$'
 
 
 def atomic(path, data):
@@ -41,6 +44,31 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def decimal_json(value):
+    """JSON with finite floats rendered as round-tripping decimal literals."""
+    if isinstance(value, float):
+        if not math.isfinite(value):
+            raise ValueError('Non-finite values cannot be encoded as JSON')
+        literal = format(Decimal(repr(value)), 'f')
+        return literal if '.' in literal else literal + '.0'
+    if value is None or isinstance(value, (str, bool, int)):
+        return json.dumps(value, ensure_ascii=False, allow_nan=False)
+    if isinstance(value, (list, tuple)):
+        return '[' + ', '.join(decimal_json(item) for item in value) + ']'
+    if isinstance(value, dict):
+        if not all(isinstance(key, str) for key in value):
+            raise TypeError('JSON object keys must be strings')
+        return '{' + ', '.join(decimal_json(key) + ': ' + decimal_json(item) for key, item in value.items()) + '}'
+    raise TypeError(f'Unsupported JSON value: {type(value).__name__}')
+
+
+def decimal_feedback(text):
+    # Upstream diagnostics embed repr(parameter_dict), which otherwise reintroduces
+    # exponent notation even when the surrounding JSON numbers use decimals.
+    pattern = r'(?<![\w.])[+-]?(?:\d+(?:\.\d*)?|\.\d+)[eE][+-]?\d+(?![\w.])'
+    return re.sub(pattern, lambda match: format(Decimal(match.group()), 'f'), text)
+
+
 def valid_params(params, spec):
     if not isinstance(params, dict) or set(params) != set(spec['bounds']):
         raise ValueError('Return all nine allowed parameters, without extra keys')
@@ -48,11 +76,27 @@ def valid_params(params, spec):
     for key, (low, high) in spec['bounds'].items():
         value = params[key]
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
-            raise ValueError(f'{key} must be a finite number')
+            raise ValueError(f'{key} decoded as {value!r}; must be a finite number')
         if not low <= value <= high:
-            raise ValueError(f'{key} must lie in [{low}, {high}]')
+            raise ValueError(f'{key} decoded as {decimal_json(value)}; must lie in [{decimal_json(low)}, {decimal_json(high)}]')
         result[key] = float(value)
     return result
+
+
+def agent_params(params, spec):
+    """Decode the model's decimal strings; never infer exponents or clip values."""
+    if not isinstance(params, dict) or set(params) != set(spec['bounds']):
+        raise ValueError('Return all nine allowed parameters, without extra keys')
+    result = {}
+    for key, (low, high) in spec['bounds'].items():
+        value = params[key]
+        if not isinstance(value, str) or re.fullmatch(DECIMAL_PARAMETER_PATTERN, value) is None:
+            raise ValueError(f'{key} decoded as {value!r}; expected a plain decimal JSON string such as "0.00000586"')
+        number = Decimal(value)
+        if not Decimal(str(low)) <= number <= Decimal(str(high)):
+            raise ValueError(f'{key} decoded as {value}; must lie in [{decimal_json(low)}, {decimal_json(high)}]')
+        result[key] = float(number)
+    return valid_params(result, spec)
 
 
 def unit_vector(params, spec):
@@ -136,7 +180,8 @@ class Agent:
 
     def ask(self, records, directory, evaluation):
         best = min((r for r in records if r['status'] == 'valid'), key=lambda r: r['objective'], default=None)
-        feedback = lambda r: {k: r[k] for k in ['evaluation', 'parameters', 'objective', 'status', 'metrics', 'feedback', 'error'] if k in r}
+        feedback = lambda r: {k: decimal_feedback(r[k]) if k in {'feedback', 'error'} else r[k]
+                              for k in ['evaluation', 'parameters', 'objective', 'status', 'metrics', 'feedback', 'error'] if k in r}
         context = {'protocol': 'Chen2020 DFN, 0.2C charge/discharge CCCV, score zero-based cycle 1',
                    'objective': self.spec['objective'], 'bounds': self.spec['bounds'],
                    'best_observation': feedback(best) if best else None,
@@ -144,11 +189,16 @@ class Agent:
                    'objective_history': [[r['evaluation'], r['objective'], r['status']] for r in records]}
         system = ('You propose physical parameters for battery fitting. Minimize exactly the sum of capacity, current and voltage RMSE. '
                   'MAPE is supplementary feedback, not the objective. Return a JSON object with rationale and parameters. '
-                  'parameters must include all nine names in bounds, finite numeric values, and stay inside each bound. '
+                  'parameters must include all nine names in bounds, with strings representing finite numbers inside each bound. '
+                  'Write each parameter value as a plain decimal JSON string, for example '
+                  '{"Negative particle radius [m]": "0.00000586"}. Include all nine parameters in your actual response. '
+                  'Do not use exponent/scientific notation, raw JSON numbers, units, or extra whitespace inside the strings. '
                   'Use the best candidate and diagnostic feedback; failed simulations are penalized. Do not repeat an unchanged '
                   'candidate without a reason. No simulator tools are available to you.\nDomain knowledge:\n' + self.knowledge)
-        messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': json.dumps(context)}]
-        properties = {k: {'type': 'number', 'minimum': limits[0], 'maximum': limits[1]} for k, limits in self.spec['bounds'].items()}
+        messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': decimal_json(context)}]
+        properties = {k: {'type': 'string', 'pattern': DECIMAL_PARAMETER_PATTERN,
+                          'description': f'Plain decimal string in [{decimal_json(limits[0])}, {decimal_json(limits[1])}]'}
+                      for k, limits in self.spec['bounds'].items()}
         schema = {'type': 'object', 'properties': {'rationale': {'type': 'string'},
                  'parameters': {'type': 'object', 'properties': properties, 'required': list(properties), 'additionalProperties': False}},
                  'required': ['rationale', 'parameters'], 'additionalProperties': False}
@@ -171,17 +221,18 @@ class Agent:
                     'options': {'seed': self.seed * 100000 + evaluation, 'temperature': opts['temperature'],
                                 'num_ctx': self.spec['agent_context_tokens'], 'num_predict': opts['num_predict']},
                     'keep_alive': '30m'}
-            write_json(request_dir / f'request-{archive_attempt}.json', body)
+            request_data = decimal_json(body).encode()
+            atomic(request_dir / f'request-{archive_attempt}.json', request_data + b'\n')
             start = time.monotonic()
             try:
-                req = urllib.request.Request(self.base_url + '/api/chat', data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'})
+                req = urllib.request.Request(self.base_url + '/api/chat', data=request_data, headers={'Content-Type': 'application/json'})
                 with http.open(req, timeout=self.timeout) as response:
                     answer = json.loads(response.read(4_000_000))
                 write_json(request_dir / f'response-{archive_attempt}.json', answer)
                 proposal = json.loads(answer['message']['content'])
                 if set(proposal) != {'parameters', 'rationale'} or not isinstance(proposal['rationale'], str):
                     raise ValueError('Return exactly parameters and rationale')
-                params = valid_params(proposal['parameters'], self.spec)
+                params = agent_params(proposal['parameters'], self.spec)
                 return params, {'rationale': proposal['rationale'], 'inference_attempts': attempt,
                                 'inference_seconds_last_attempt': time.monotonic() - start,
                                 'inference_errors': errors, 'model': opts['name']}
@@ -190,7 +241,9 @@ class Agent:
                          'error': str(exc)[:2000], 'seconds': time.monotonic() - start}
                 write_json(request_dir / f'error-{archive_attempt}.json', error)
                 errors.append(error)
-                messages.append({'role': 'user', 'content': 'Proposal could not be used: ' + str(exc)[:1000] + '. Return complete valid JSON within the supplied bounds.'})
+                messages.append({'role': 'user', 'content': 'Proposal could not be used: ' + str(exc)[:1000]
+                                 + '. Return complete valid JSON within the supplied bounds. Every parameter value must be a plain '
+                                 'decimal JSON string such as "0.00000586", without exponent notation, units, or raw JSON numbers.'})
         raise RuntimeError(f'Model proposal failed after 3 attempts before simulation: {errors[-1]["error"]}')
 
 
@@ -379,6 +432,7 @@ def main():
                   'runner_sha256': digest(__file__), 'python': sys.version, 'mock': a.mock,
                   'packages': packages,
                   'shared_initial_evaluation_counted': True, 'target_generation_counted_as_optimizer_evaluation': False,
+                  'agent_numeric_format': 'Plain decimal inputs; regex-constrained decimal-string outputs; exact decimal bounds checks then finite float conversion, without rescaling or clipping.',
                   'bo_setup': 'Common initial point is attached; then 18 generated Sobol trials followed by Ax BoTorch modular GP acquisition.',
                   'cma_setup': 'Normalized unit cube; population 10; sigma 0.2; RNG seed=experiment seed+1; final partial population is evaluated but not told.',
                   'replay_policy': 'No previous-pilot observations reused. Resume restores only this run; an uncertain interrupted simulator call consumes its reserved slot.'}
