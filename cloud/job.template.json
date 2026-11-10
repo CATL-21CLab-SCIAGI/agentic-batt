@@ -1,0 +1,26 @@
+{
+  "WorkspaceId": "<private-workspace-id>",
+  "DisplayName": "agentic-batt-matched-1gpu",
+  "JobType": "PyTorchJob",
+  "ResourceId": "<private-quota-id>",
+  "Priority": 1,
+  "Accessibility": "PRIVATE",
+  "JobMaxRunningTimeMinutes": 1440,
+  "UserCommand": "timeout --signal=TERM --kill-after=90s 85890s <prepared-python> <project>/cloud/run_dlc.py --persistent-root <namespace> --project <project> --upstream <patched-upstream> --python <prepared-python> --ollama <ollama-binary> --models <ollama-model-store> --run-dir <new-run-directory> --max-seconds 85800",
+  "UserVpc": {
+    "VpcId": "<private-vpc-id>",
+    "SwitchId": "<private-switch-id>",
+    "SecurityGroupId": "<private-security-group-id>"
+  },
+  "JobSpecs": [
+    {
+      "Type": "Worker",
+      "Image": "<approved-gpu-runtime-image>",
+      "PodCount": 1,
+      "ResourceConfig": {"CPU": "24", "Memory": "128Gi", "SharedMemory": "32Gi", "GPU": "1"}
+    }
+  ],
+  "DataSources": [
+    {"Uri": "<private-persistent-storage-uri>", "MountPath": "<mount-point>", "MountAccess": "RW"}
+  ]
+}

@@ -1,6 +1,8 @@
 # Agentic Batt
 
-Local agent-versus-baseline experiments for battery parameter fitting, plus an OPAL neural-network optimization pilot. Results below come from the recorded October 24–26, 2026 runs.
+Agent-versus-baseline experiments for battery parameter fitting, plus an OPAL neural-network optimization pilot. Results below come from the recorded October 24–26, 2026 runs.
+
+A new [matched-budget battery campaign](docs/matched_benchmark.md) compares Gemma, Qwen, CMA-ES, and BO at **100 evaluations × three seeds per method** on one cloud GPU. Its [deployment status](experiments/battery/matched/launch_status.json) is separate from the pilot results below. This single-target study does not establish the paper's reported 58–97% MAPE reduction.
 
 ## Battery agent versus baselines
 

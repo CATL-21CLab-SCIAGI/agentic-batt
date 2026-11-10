@@ -1,0 +1,10 @@
+numpy==1.26.4
+# The DLC bootstrap preinstalls torch==2.8.0+cpu from the PyTorch CPU index.
+torch==2.8.0
+pybamm==25.6.0
+PyYAML==6.0.2
+matplotlib==3.11.2
+cma==4.5.0
+ax-platform==0.5.0
+pandas==2.2.3
+Jinja2==3.1.6

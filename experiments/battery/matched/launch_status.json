@@ -1,0 +1,12 @@
+{
+  "status": "preparing",
+  "date": "2026-11-10",
+  "requested_gpus": 1,
+  "maximum_job_runtime_hours": 24,
+  "methods": ["gemma", "qwen", "cma", "bo"],
+  "seeds": [0, 1, 2],
+  "evaluation_slots_per_method_seed": 100,
+  "total_planned_evaluation_slots": 1200,
+  "completed_campaign": false,
+  "note": "Deployment preparation only; no new optimizer result is claimed."
+}
