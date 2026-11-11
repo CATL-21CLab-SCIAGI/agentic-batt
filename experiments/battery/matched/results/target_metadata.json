@@ -1,0 +1,13 @@
+{
+  "status": "prepared",
+  "settings": {
+    "charge_c_rate": 0.2,
+    "discharge_c_rate": 0.2,
+    "model_name": "DFN",
+    "param_name": "Chen2020",
+    "parameter_change": {
+      "Negative electrode thickness [m]": 6.39e-05
+    }
+  },
+  "cycles": 2
+}

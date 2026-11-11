@@ -1,0 +1,350 @@
+{
+  "status": "failed",
+  "methods": [
+    "gemma",
+    "qwen",
+    "cma",
+    "bo"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "budget_each": 100,
+  "results": [
+    {
+      "status": "completed",
+      "method": "gemma",
+      "seed": 0,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 100,
+      "failed_evaluations": 0,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 99,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 3.1465025658118693,
+      "best_parameters": {
+        "Negative particle radius [m]": 5.86e-06,
+        "Positive particle radius [m]": 5.22e-06,
+        "Negative electrode thickness [m]": 8e-05,
+        "Positive electrode thickness [m]": 7e-05,
+        "Negative electrode porosity": 0.25,
+        "Positive electrode porosity": 0.335,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Separator thickness [m]": 1e-05
+      },
+      "milestones": {
+        "5": 3.7709856471767935,
+        "30": 3.1465025658118693,
+        "100": 3.1465025658118693
+      },
+      "updated_utc": "2026-11-10T08:39:47.512540+00:00",
+      "simulation_wall_seconds": 829.9416342040003,
+      "proposal_wall_seconds": 196.93896855200063,
+      "started_utc": "2026-11-10T08:22:11.831292+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 1055.682167
+    },
+    {
+      "status": "completed",
+      "method": "gemma",
+      "seed": 1,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 100,
+      "failed_evaluations": 0,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 99,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 3.146348511606874,
+      "best_parameters": {
+        "Negative particle radius [m]": 5.86e-06,
+        "Positive particle radius [m]": 5.22e-06,
+        "Negative electrode thickness [m]": 8e-05,
+        "Positive electrode thickness [m]": 7e-05,
+        "Negative electrode porosity": 0.25,
+        "Positive electrode porosity": 0.335,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Separator thickness [m]": 1.5e-05
+      },
+      "milestones": {
+        "5": 3.146348511606874,
+        "30": 3.146348511606874,
+        "100": 3.146348511606874
+      },
+      "updated_utc": "2026-11-10T08:57:10.262959+00:00",
+      "simulation_wall_seconds": 836.1644437289997,
+      "proposal_wall_seconds": 178.25299198200014,
+      "started_utc": "2026-11-10T08:39:47.541217+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 1042.722526
+    },
+    {
+      "status": "completed",
+      "method": "gemma",
+      "seed": 2,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 100,
+      "failed_evaluations": 0,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 99,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 3.7709856471767935,
+      "best_parameters": {
+        "Negative particle radius [m]": 5.86e-06,
+        "Positive particle radius [m]": 5.22e-06,
+        "Negative electrode thickness [m]": 8.52e-05,
+        "Positive electrode thickness [m]": 7.56e-05,
+        "Negative electrode porosity": 0.25,
+        "Positive electrode porosity": 0.335,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+        "Separator thickness [m]": 1.2e-05
+      },
+      "milestones": {
+        "5": 3.7709856471767935,
+        "30": 3.7709856471767935,
+        "100": 3.7709856471767935
+      },
+      "updated_utc": "2026-11-10T09:14:31.814622+00:00",
+      "simulation_wall_seconds": 840.0825551080011,
+      "proposal_wall_seconds": 172.98742586199705,
+      "started_utc": "2026-11-10T08:57:10.292452+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 1041.522964
+    },
+    {
+      "status": "completed",
+      "method": "qwen",
+      "seed": 0,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 100,
+      "failed_evaluations": 0,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 100,
+      "inference_rejected_or_failed_attempts": 1,
+      "best_objective": 0.0359197121716371,
+      "best_parameters": {
+        "Negative particle radius [m]": 5.4e-06,
+        "Positive particle radius [m]": 5.5e-06,
+        "Negative electrode thickness [m]": 6.4e-05,
+        "Positive electrode thickness [m]": 7e-05,
+        "Negative electrode porosity": 0.25,
+        "Positive electrode porosity": 0.365,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.725,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.4,
+        "Separator thickness [m]": 1.35e-05
+      },
+      "milestones": {
+        "5": 0.1143780559456093,
+        "30": 0.08171893653166823,
+        "100": 0.0359197121716371
+      },
+      "updated_utc": "2026-11-10T11:17:31.838923+00:00",
+      "simulation_wall_seconds": 965.8133238899991,
+      "proposal_wall_seconds": 6383.646119125006,
+      "started_utc": "2026-11-10T09:14:31.864662+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 7379.975069
+    },
+    {
+      "status": "completed",
+      "method": "qwen",
+      "seed": 1,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 100,
+      "failed_evaluations": 0,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 101,
+      "inference_rejected_or_failed_attempts": 2,
+      "best_objective": 0.05805210844063793,
+      "best_parameters": {
+        "Negative particle radius [m]": 5.45e-06,
+        "Positive particle radius [m]": 5.1e-06,
+        "Negative electrode thickness [m]": 6.4e-05,
+        "Positive electrode thickness [m]": 7e-05,
+        "Negative electrode porosity": 0.27,
+        "Positive electrode porosity": 0.356,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.74,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.72,
+        "Separator thickness [m]": 1.71e-05
+      },
+      "milestones": {
+        "5": 0.5405088898153334,
+        "30": 0.0665180337115148,
+        "100": 0.05805210844063793
+      },
+      "updated_utc": "2026-11-10T13:25:28.489471+00:00",
+      "simulation_wall_seconds": 912.5696784500033,
+      "proposal_wall_seconds": 6736.115862612009,
+      "started_utc": "2026-11-10T11:17:31.867421+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 7676.622762
+    },
+    {
+      "status": "completed",
+      "method": "qwen",
+      "seed": 2,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 100,
+      "failed_evaluations": 0,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 99,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 0.0487419110241548,
+      "best_parameters": {
+        "Negative particle radius [m]": 5e-06,
+        "Positive particle radius [m]": 5.4e-06,
+        "Negative electrode thickness [m]": 6.4e-05,
+        "Positive electrode thickness [m]": 6.8e-05,
+        "Negative electrode porosity": 0.303,
+        "Positive electrode porosity": 0.355,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 2.2,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.994,
+        "Separator thickness [m]": 2.3e-05
+      },
+      "milestones": {
+        "5": 0.15402806897389776,
+        "30": 0.051601510203004214,
+        "100": 0.0487419110241548
+      },
+      "updated_utc": "2026-11-10T15:27:20.188775+00:00",
+      "simulation_wall_seconds": 883.3438694559991,
+      "proposal_wall_seconds": 6401.31761011701,
+      "started_utc": "2026-11-10T13:25:28.513751+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 7311.675699
+    },
+    {
+      "status": "completed",
+      "method": "cma",
+      "seed": 0,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 92,
+      "failed_evaluations": 8,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 0,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 0.43279820480013653,
+      "best_parameters": {
+        "Negative particle radius [m]": 2.776901904479919e-06,
+        "Positive particle radius [m]": 6.306082419337298e-06,
+        "Negative electrode thickness [m]": 6.268073815180055e-05,
+        "Positive electrode thickness [m]": 9.041213497541831e-05,
+        "Negative electrode porosity": 0.2554227705994393,
+        "Positive electrode porosity": 0.33063202586999263,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.5257922967390651,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.5644228250720227,
+        "Separator thickness [m]": 8.400812973421568e-06
+      },
+      "milestones": {
+        "5": 1.6226033138024059,
+        "30": 0.5206507318630007,
+        "100": 0.43279820480013653
+      },
+      "updated_utc": "2026-11-10T15:41:08.070236+00:00",
+      "simulation_wall_seconds": 799.2446688299897,
+      "proposal_wall_seconds": 2.0771984979910485,
+      "started_utc": "2026-11-10T15:27:20.232365+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 827.838542
+    },
+    {
+      "status": "completed",
+      "method": "cma",
+      "seed": 1,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 95,
+      "failed_evaluations": 5,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 0,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 0.3419778594825092,
+      "best_parameters": {
+        "Negative particle radius [m]": 2.6557150736633168e-06,
+        "Positive particle radius [m]": 5.256056077949422e-06,
+        "Negative electrode thickness [m]": 6.3334870513782e-05,
+        "Positive electrode thickness [m]": 7.217403456962873e-05,
+        "Negative electrode porosity": 0.26077619845247035,
+        "Positive electrode porosity": 0.28951490029915383,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.522961595654797,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.4527613568068536,
+        "Separator thickness [m]": 9.02191473990325e-06
+      },
+      "milestones": {
+        "5": 0.3419778594825092,
+        "30": 0.3419778594825092,
+        "100": 0.3419778594825092
+      },
+      "updated_utc": "2026-11-10T15:55:00.787505+00:00",
+      "simulation_wall_seconds": 809.9506692319737,
+      "proposal_wall_seconds": 1.8097157609881833,
+      "started_utc": "2026-11-10T15:41:08.093777+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 832.694423
+    },
+    {
+      "status": "completed",
+      "method": "cma",
+      "seed": 2,
+      "budget": 100,
+      "evaluations": 100,
+      "valid_evaluations": 84,
+      "failed_evaluations": 16,
+      "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+      "interrupted_budget_slots": 0,
+      "inference_attempts": 0,
+      "inference_rejected_or_failed_attempts": 0,
+      "best_objective": 0.3480271488093809,
+      "best_parameters": {
+        "Negative particle radius [m]": 1.5971855508242735e-05,
+        "Positive particle radius [m]": 4.2142349524803015e-06,
+        "Negative electrode thickness [m]": 6.667769798141167e-05,
+        "Positive electrode thickness [m]": 4.802193333962613e-05,
+        "Negative electrode porosity": 0.29263813572958125,
+        "Positive electrode porosity": 0.32401228485806494,
+        "Negative electrode Bruggeman coefficient (electrolyte)": 1.8272055596348176,
+        "Positive electrode Bruggeman coefficient (electrolyte)": 1.4192951603967474,
+        "Separator thickness [m]": 1.447617204892228e-05
+      },
+      "milestones": {
+        "5": 2.3865492209032633,
+        "30": 0.3480271488093809,
+        "100": 0.3480271488093809
+      },
+      "updated_utc": "2026-11-10T16:08:55.855424+00:00",
+      "simulation_wall_seconds": 811.8585848029979,
+      "proposal_wall_seconds": 1.8256374589836923,
+      "started_utc": "2026-11-10T15:55:00.812367+00:00",
+      "elapsed_wall_seconds_including_resume_gaps": 835.043721
+    },
+    {
+      "method": "bo",
+      "seed": 0,
+      "status": "failed",
+      "error": "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_python.so: undefined symbol: _PyThreadState_GetCurrent"
+    },
+    {
+      "method": "bo",
+      "seed": 1,
+      "status": "failed",
+      "error": "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_python.so: undefined symbol: _PyThreadState_GetCurrent"
+    },
+    {
+      "method": "bo",
+      "seed": 2,
+      "status": "failed",
+      "error": "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_python.so: undefined symbol: _PyThreadState_GetCurrent"
+    }
+  ]
+}

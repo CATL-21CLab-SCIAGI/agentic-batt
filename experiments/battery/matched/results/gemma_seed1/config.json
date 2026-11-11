@@ -1,0 +1,89 @@
+{
+  "method": "gemma",
+  "seed": 1,
+  "budget": 100,
+  "spec": {
+    "upstream_revision": "354f2ddcbb8d14d6dfe9673aac55199976d2d42c",
+    "target_file": "generate_simulated_data/output/simulated_data_setting_single_new_filtered.yaml",
+    "test_id": 2,
+    "cycle_indices_zero_based": [
+      1
+    ],
+    "bounds": {
+      "Negative particle radius [m]": [
+        2.5e-06,
+        2.74e-05
+      ],
+      "Positive particle radius [m]": [
+        2.5e-08,
+        2e-05
+      ],
+      "Negative electrode thickness [m]": [
+        2.55e-05,
+        0.00015
+      ],
+      "Positive electrode thickness [m]": [
+        4.05e-05,
+        0.00015
+      ],
+      "Negative electrode porosity": [
+        0.2,
+        0.41
+      ],
+      "Positive electrode porosity": [
+        0.246,
+        0.476
+      ],
+      "Negative electrode Bruggeman coefficient (electrolyte)": [
+        1.5,
+        2.5
+      ],
+      "Positive electrode Bruggeman coefficient (electrolyte)": [
+        1.3,
+        2.3
+      ],
+      "Separator thickness [m]": [
+        8.4e-06,
+        3.25e-05
+      ]
+    },
+    "initial_parameters": {
+      "Negative particle radius [m]": 5.86e-06,
+      "Positive particle radius [m]": 5.22e-06,
+      "Negative electrode thickness [m]": 8.52e-05,
+      "Positive electrode thickness [m]": 7.56e-05,
+      "Negative electrode porosity": 0.25,
+      "Positive electrode porosity": 0.335,
+      "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
+      "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
+      "Separator thickness [m]": 1.2e-05
+    },
+    "objective": "Q_rmse + I_rmse + V_rmse; minimize; mixed physical units",
+    "simulation_failure_penalty": 1000000.0,
+    "cma_population": 10,
+    "cma_sigma_unit_box": 0.2,
+    "bo_sobol_generated_trials": 18,
+    "models": {
+      "gemma": {
+        "name": "gemma4:e2b-qat-google",
+        "think": false,
+        "num_predict": 4096,
+        "temperature": 0.7
+      },
+      "qwen": {
+        "name": "qwen3.8:27b-opal",
+        "think": "medium",
+        "num_predict": 8192,
+        "temperature": 1.0
+      }
+    },
+    "agent_context_tokens": 32768,
+    "agent_history": "best valid candidate, last 8 full observations, all scalar objective values; explicit common objective and upstream TEXT_KNOWLEDGE"
+  },
+  "runner_sha256": "35c6d3c3431cb8a1693b2c927bf5ebc406141ffee1985093fb40f612ccc755d3",
+  "worker_sha256": "bc9a2a612105687775e3126584a6cbe913d6506a64284d6c429d89594903033d",
+  "target_sha256": "83596a25cec3edbe6b00f9495282f71322928ff8cd0b23a0f058a233b3e95f4f",
+  "simulation_timeout": 600,
+  "model_timeout": 900,
+  "mock": false
+}

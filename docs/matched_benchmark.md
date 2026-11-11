@@ -2,6 +2,8 @@
 
 This fresh campaign tests whether additional evaluation budget improves agent fitting on the pilot's single simulated target. It preserves the existing pilot results. It is not a reproduction of the paper's multi-chemistry experiments or its reported 58–97% MAPE reduction.
 
+All 12 runs completed 100 slots each: 1,150 valid simulations and 50 numerical solver failures. Measured trajectories, selected parameters, seed statistics, and coverage are in [the result summary](../experiments/battery/matched/results/summary.json); [the figure](../plots/battery_matched.png) shows independent best-so-far RMSE and MAPE. Both metrics select candidates independently. Seed ranges are descriptive, not confidence intervals. The [campaign manifest](../experiments/battery/matched/results/campaign_manifest.json) connects the original nine runs and separately recovered BO runs.
+
 ## Fixed protocol
 
 | Setting | Value |
@@ -16,9 +18,9 @@ This fresh campaign tests whether additional evaluation budget improves agent fi
 | Objective | Minimize capacity RMSE + current RMSE + voltage RMSE |
 | Secondary metric | Sum of capacity, current, and voltage MAPEs (%) |
 | Failure policy | Failed/timed-out simulations consume a slot and receive objective penalty 1,000,000 |
-| Runtime limit | One GPU; campaign stops on completion or within 24 hours |
+| Runtime limit | Original campaign: one GPU, 24-hour cap; separate BO recovery: CPU only, 90-minute cap |
 
-Exact bounds, initial values, model settings, and optimizer parameters are in [spec.json](../experiments/battery/matched/spec.json). RMSE sums mix physical units. Each metric's best observed candidate can differ; a later report must retain this distinction.
+Exact bounds, initial values, model settings, and optimizer parameters are in [spec.json](../experiments/battery/matched/spec.json). RMSE sums mix physical units. Each metric selects its best observed candidate independently.
 
 CMA-ES operates in the unit box with population 10 and initial standard deviation 0.2. Its RNG seed is the experiment seed plus one, because CMA treats seed zero as time-dependent. The shared initial evaluation sets the starting reference; 99 further candidates span nine complete generations and one partial generation.
 
@@ -47,4 +49,27 @@ Add `--resume` only for the same saved campaign and configuration. Each method/s
 
 [Local validation](../experiments/battery/matched/validation.json) covers budget accounting, proposal validation, real initial-point agreement, and BO's transition to GP acquisition. [Linux validation](../experiments/battery/matched/linux_validation.json) confirms the prepared environment's real initial scores and BO acquisition/checkpoint behavior. The [GPU adapter diagnostic](../experiments/battery/matched/gpu_adapter_validation.json) verifies one real proposal and simulation from each corrected agent. [Deployment status](../experiments/battery/matched/launch_status.json) reports the latest verified cloud observation. A running job or a GPU smoke check is not a completed optimizer result.
 
-The planned comparison reports all three seeds, failed evaluations, and best-so-far RMSE/MAPE against both evaluation count and elapsed time. Additional simulator budget alone cannot establish an agent advantage; any conclusion remains limited to this target, these models, and this protocol.
+The comparison reports all three seeds, failed evaluations, and best-so-far RMSE/MAPE against evaluation count. Elapsed and component timings are retained in the summary; the separately recovered BO runs are not an equal-hardware timing comparison. Additional simulator budget alone cannot establish an agent advantage; any conclusion remains limited to this target, these models, and this protocol.
+
+## Native-library failure and BO recovery
+
+The original job completed all 900 Gemma, Qwen, and CMA-ES slots. BO failed before its first simulation: the container's `LD_LIBRARY_PATH` selected `libtorch_python.so` from Python 3.12 while the prepared interpreter was Python 3.11. Package metadata correctly reported the installed CPU Torch version, but did not reveal the incompatible native library. Removing Python import overrides alone did not fix the actual-image diagnostic; removing the native-loader overrides did.
+
+The launcher now gives Python and its workers an isolated environment with those loader overrides removed. Ollama retains its CUDA environment. Before loading models, a preflight imports actual dependencies, checks their locations and loaded Torch libraries, executes a CPU tensor operation, exercises BO GP acquisition, and checks optimizer serialization. This detects the observed failure before an hours-long agent campaign.
+
+The [CPU recovery entrypoint](../cloud/recover_bo.py) preserves the completed runs and original failed status. It uses the same scientific runner, worker, specification, upstream sources, and target bytes. Before BO starts, it re-evaluates the initial point and a saved noninitial point and checks all component metrics for numerical agreement. These diagnostics do not initialize BO or count toward its budget. Each seed gets a separate output directory and 100 fresh evaluation slots, with no optimizer observations reused.
+
+Recovered BO results are combined with the original nine runs through separate provenance records; the original job is never relabeled successful. BO seeds run concurrently on a CPU allocation with the same container image tag. This supports an evaluation-budget comparison, not an equal-hardware or wall-time comparison. Individual wall times and component timings remain available in the records.
+
+The original CMA runs contained 29 numerical failures (8, 5, and 16 by seed). Their logs report `IDA_LSETUP_FAIL` before the upstream `list index out of range` message. They are counted as failed simulator slots, not categorized as physically impossible parameter vectors. See the [record audit](../experiments/battery/matched/results/original_record_audit.json).
+
+The CPU recovery completed all 300 BO slots, and the platform reported success. Its 21 numerical failures (7, 6, and 8 by seed) have the same solver signature. The [recovery audit](../experiments/battery/matched/results/recovery_record_audit.json) verifies every evaluation against its trajectory, bounds, objective, and budget, confirms matching source and target hashes, and records exact agreement for both reference replays.
+
+Regenerate the matched summaries and plots from committed trajectories:
+
+```sh
+python scripts/summarize_matched.py --data experiments/battery/matched/results
+python scripts/plot_matched.py \
+  --summary experiments/battery/matched/results/summary.json \
+  --out plots/battery_matched
+```

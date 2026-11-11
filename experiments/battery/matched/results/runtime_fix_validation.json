@@ -1,0 +1,78 @@
+{
+  "status": "passed",
+  "observed_at_utc": "2026-11-11T02:28:27.664332+00:00",
+  "cause": "DLC image LD_LIBRARY_PATH selected Python 3.12 libtorch_python.so inside a Python 3.11 process.",
+  "actual_image_diagnostic": {
+    "inherited_environment": "import_failed",
+    "python_overrides_removed_only": "import_failed",
+    "native_loader_overrides_removed": "import_and_tensor_passed"
+  },
+  "python": "3.11.12 (main, Apr  9 2025, 04:04:00) [Clang 20.1.0 ]",
+  "isolated": 1,
+  "user_site_enabled": false,
+  "module_versions": {
+    "torch": "2.8.0+cpu",
+    "numpy": "1.26.4",
+    "scipy": "1.17.1",
+    "ax": "0.5.0",
+    "botorch": "0.13.0",
+    "gpytorch": "1.14",
+    "pybamm": "25.6.0",
+    "casadi": "3.6.7",
+    "pybammsolvers": "0.3.3",
+    "cma": "4.5.0",
+    "pandas": "2.2.3",
+    "matplotlib": "3.11.2",
+    "yaml": "6.0.2",
+    "jinja2": "3.1.6"
+  },
+  "all_module_and_libtorch_origins_in_prepared_venv": true,
+  "native_libraries": [
+    "libtorch.so",
+    "libtorch_cpu.so",
+    "libtorch_global_deps.so",
+    "libtorch_python.so"
+  ],
+  "cpu_tensor_smoke": true,
+  "worker_runtime_smoke": {
+    "tensor_sum": 2.0,
+    "user_site": false,
+    "safe_path": true
+  },
+  "bo_gp_acquisition": true,
+  "bo_pickle_resume": true,
+  "synthetic_completed_observations": 20,
+  "reference_replay": {
+    "initial": {
+      "status": "passed",
+      "reference_record": "cma_seed0/evaluations/0001.json",
+      "reference_objective": 3.7709856471767935,
+      "observed_objective": 3.7709856471767935,
+      "absolute_differences": {
+        "objective": 0.0,
+        "Q_rmse": 0.0,
+        "Q_mape": 0.0,
+        "I_rmse": 0.0,
+        "I_mape": 0.0,
+        "V_rmse": 0.0,
+        "V_mape": 0.0
+      }
+    },
+    "noninitial": {
+      "status": "passed",
+      "reference_record": "cma_seed0/evaluations/0002.json",
+      "reference_objective": 1.6226033138024059,
+      "observed_objective": 1.6226033138024059,
+      "absolute_differences": {
+        "objective": 0.0,
+        "Q_rmse": 0.0,
+        "Q_mape": 0.0,
+        "I_rmse": 0.0,
+        "I_mape": 0.0,
+        "V_rmse": 0.0,
+        "V_mape": 0.0
+      }
+    }
+  },
+  "diagnostics_count_toward_budget": false
+}

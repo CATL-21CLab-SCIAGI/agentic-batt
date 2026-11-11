@@ -1,150 +1,45 @@
 {
-  "status": "running",
-  "observed_at_utc": "2026-11-10T08:23:17.807193+00:00",
-  "source_commit": "161075e7814f3dda85ad6cfb250832f27a81e1d5",
-  "campaign_attempt": 2,
-  "platform_status": "Running",
-  "phase": "benchmark",
-  "started_utc": "2026-11-10T08:16:01.425756+00:00",
-  "requested_gpus": 1,
-  "observed_gpus": 1,
-  "gpu": {
-    "name": "NVIDIA L20D",
-    "memory_total_mib": 275040,
-    "driver_version": "580.105.08"
+  "status": "completed",
+  "observed_at_utc": "2026-11-11T02:50:32.516621+00:00",
+  "scientific_source_commit": "161075e7814f3dda85ad6cfb250832f27a81e1d5",
+  "runtime_fix_commit": "c625eb50c4c9aab74a700ce0c8c27a0fdcbb8de2",
+  "original_campaign": {
+    "platform_status": "Failed",
+    "completed_runs": 9,
+    "recorded_slots": 900,
+    "failed_component": "BO initialization before evaluation 1",
+    "records_preserved": true
   },
-  "private_access": true,
-  "platform_runtime_limit_minutes": 1410,
-  "worker_runtime_limit_seconds": 84000,
-  "methods": [
-    "gemma",
-    "qwen",
-    "cma",
-    "bo"
-  ],
-  "seeds": [
-    0,
-    1,
-    2
-  ],
-  "evaluation_slots_per_method_seed": 100,
-  "total_planned_evaluation_slots": 1200,
-  "ollama_version": "0.33.2",
-  "weight_sha256": {
-    "gemma4:e2b-qat-google": "fa401b55b07ee70a54c6dae3903c783a6e65064312529ea57175cb5f8dec6634",
-    "qwen3.8:27b-opal": "11fdb2dc2fdec62d4684b0a4b6f6e96da3f9f633de1fba0a78830dff12b54375"
+  "recovery": {
+    "status": "completed",
+    "phase": "finished",
+    "requested_gpus": 0,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "evaluation_slots_per_seed": 100,
+    "max_seconds": 5400,
+    "original_observations_reused": false,
+    "platform_status": "Succeeded",
+    "platform_finished_utc": "2026-11-11T02:48:00Z",
+    "completed_runs": 3,
+    "recorded_slots": 300,
+    "valid_evaluations": 279,
+    "failed_evaluations": 21
   },
-  "gpu_smoke_checks": [
-    {
-      "model": "gemma4:e2b-qat-google",
-      "success": true,
-      "gpu_memory_bytes": 1734155960,
-      "generated_tokens": 6,
-      "elapsed_seconds": 89.384531428
-    },
-    {
-      "model": "qwen3.8:27b-opal",
-      "success": true,
-      "gpu_memory_bytes": 18718455234,
-      "generated_tokens": 6,
-      "elapsed_seconds": 36.45631640100004
-    }
-  ],
-  "agent_proposed_simulation_verified": true,
-  "progress_snapshot": [
-    {
-      "method": "gemma",
-      "seed": 0,
-      "status": "running",
-      "budget": 100,
-      "evaluations": 5,
-      "valid_evaluations": 5,
-      "failed_evaluations": 0,
-      "inference_attempts": 4
-    },
-    {
-      "method": "gemma",
-      "seed": 1,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "gemma",
-      "seed": 2,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "qwen",
-      "seed": 0,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "qwen",
-      "seed": 1,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "qwen",
-      "seed": 2,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "cma",
-      "seed": 0,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "cma",
-      "seed": 1,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "cma",
-      "seed": 2,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "bo",
-      "seed": 0,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "bo",
-      "seed": 1,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    },
-    {
-      "method": "bo",
-      "seed": 2,
-      "status": "not_started",
-      "budget": 100,
-      "evaluations": 0
-    }
-  ],
-  "completed_campaign": false,
-  "earlier_attempt": {
-    "status": "stopped",
-    "records_preserved": true,
-    "reason": "Incorrect exponents in numeric JSON proposals; replaced with validated decimal-string adapter."
+  "completed_campaign": true,
+  "note": "Completed aggregate of nine preserved original runs and three separately recovered BO runs. Original platform failure remains recorded; evaluation budgets match, hardware and wall time do not.",
+  "aggregate": {
+    "expected_runs": 12,
+    "completed_runs": 12,
+    "expected_slots": 1200,
+    "recorded_slots": 1200,
+    "valid_evaluations": 1150,
+    "failed_evaluations": 50,
+    "initial_parameters_agree_across_recorded_runs": true,
+    "initial_rmse_agrees_across_recorded_runs": true
   },
-  "note": "Static deployment snapshot. Campaign results are incomplete; no agent advantage or paper reproduction is claimed."
+  "campaign_manifest": "results/campaign_manifest.json"
 }

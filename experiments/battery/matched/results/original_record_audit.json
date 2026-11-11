@@ -1,0 +1,24 @@
+{
+  "status": "verified",
+  "date": "2026-11-11",
+  "recorded_slots": 900,
+  "valid_simulations": 871,
+  "failed_simulations": 29,
+  "failures_by_run": {
+    "cma_seed0": 8,
+    "cma_seed1": 5,
+    "cma_seed2": 16
+  },
+  "original_log_signature": "IDA_LSETUP_FAIL: linear solver setup failed unrecoverably",
+  "recorded_error": "list index out of range",
+  "classification": "Numerical simulation failures; not Torch import errors, timeouts, or proof of physically impossible parameters.",
+  "target_sha256": "83596a25cec3edbe6b00f9495282f71322928ff8cd0b23a0f058a233b3e95f4f",
+  "all_initial_objectives": 3.7709856471767935,
+  "checks": [
+    "100 contiguous slots for each of nine runs",
+    "JSONL agrees with per-evaluation JSON",
+    "Bounds, objective sums, penalties and best summaries verified",
+    "Runner, worker, spec and upstream source hashes match frozen source",
+    "Actual target bytes match all run configurations"
+  ]
+}

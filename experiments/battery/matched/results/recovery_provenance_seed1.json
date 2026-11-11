@@ -1,0 +1,31 @@
+{
+  "upstream_revision": "354f2ddcbb8d14d6dfe9673aac55199976d2d42c",
+  "source_sha256": {
+    "pybamm_runner.py": "1fe81b037b9bdf68676498b984b38ab6384152960c317d8b316ecc5074149e34",
+    "utils/exp.py": "aa6fccd9c6250b5addcb21c1786caeaa1fa3944467bd6a83182369c1f2ccce88",
+    "utils/data.py": "6b8801a6f927bc437e815bf3fd02e1f6f6d0d8a6c89d37568c09f5ff002fb750",
+    "utils/plot.py": "603c5653944eada062507fbdb546942caea84b2dc0686eeee998eed347123e19",
+    "prompt.yaml": "3a3006b8ed8bb5a5cfc0c0abe73eef5793b2d69c334bdf0fadbc2ac41c41e223"
+  },
+  "runner_sha256": "35c6d3c3431cb8a1693b2c927bf5ebc406141ffee1985093fb40f612ccc755d3",
+  "python": "3.11.12 (main, Apr  9 2025, 04:04:00) [Clang 20.1.0 ]",
+  "mock": false,
+  "packages": {
+    "numpy": "1.26.4",
+    "pybamm": "25.6.0",
+    "cma": "4.5.0",
+    "ax-platform": "0.5.0",
+    "torch": "2.8.0+cpu",
+    "pandas": "2.2.3",
+    "botorch": "0.13.0",
+    "gpytorch": "1.14",
+    "casadi": "3.6.7",
+    "pybammsolvers": "0.3.3"
+  },
+  "shared_initial_evaluation_counted": true,
+  "target_generation_counted_as_optimizer_evaluation": false,
+  "agent_numeric_format": "Plain decimal inputs; regex-constrained decimal-string outputs; exact decimal bounds checks then finite float conversion, without rescaling or clipping.",
+  "bo_setup": "Common initial point is attached; then 18 generated Sobol trials followed by Ax BoTorch modular GP acquisition.",
+  "cma_setup": "Normalized unit cube; population 10; sigma 0.2; RNG seed=experiment seed+1; final partial population is evaluated but not told.",
+  "replay_policy": "No previous-pilot observations reused. Resume restores only this run; an uncertain interrupted simulator call consumes its reserved slot."
+}

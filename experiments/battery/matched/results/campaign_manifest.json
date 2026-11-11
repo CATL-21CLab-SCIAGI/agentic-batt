@@ -1,0 +1,67 @@
+{
+  "status": "completed",
+  "observed_at_utc": "2026-11-11T02:50:32.516621+00:00",
+  "coverage": {
+    "expected_runs": 12,
+    "completed_runs": 12,
+    "expected_slots": 1200,
+    "recorded_slots": 1200,
+    "valid_evaluations": 1150,
+    "failed_evaluations": 50,
+    "initial_parameters_agree_across_recorded_runs": true,
+    "initial_rmse_agrees_across_recorded_runs": true
+  },
+  "groups": [
+    {
+      "methods": [
+        "gemma",
+        "qwen",
+        "cma"
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "recorded_slots": 900,
+      "scientific_source_commit": "161075e7814f3dda85ad6cfb250832f27a81e1d5",
+      "original_platform_status": "Failed",
+      "failure": "BO initialization before evaluation 1; nine completed runs preserved",
+      "provenance": "original_provenance.json",
+      "campaign_status": "original_campaign_status.json",
+      "record_audit": "original_record_audit.json"
+    },
+    {
+      "methods": [
+        "bo"
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "recorded_slots": 300,
+      "runtime_fix_commit": "c625eb50c4c9aab74a700ce0c8c27a0fdcbb8de2",
+      "platform_status": "Succeeded",
+      "requested_gpus": 0,
+      "parallel_seed_processes": 3,
+      "provenance": [
+        "recovery_provenance_seed0.json",
+        "recovery_provenance_seed1.json",
+        "recovery_provenance_seed2.json"
+      ],
+      "campaign_status": "recovery_campaign_status.json",
+      "record_audit": "recovery_record_audit.json"
+    }
+  ],
+  "scientific_source_unchanged": true,
+  "runner_sha256": "35c6d3c3431cb8a1693b2c927bf5ebc406141ffee1985093fb40f612ccc755d3",
+  "worker_sha256": "bc9a2a612105687775e3126584a6cbe913d6506a64284d6c429d89594903033d",
+  "target_sha256": "83596a25cec3edbe6b00f9495282f71322928ff8cd0b23a0f058a233b3e95f4f",
+  "upstream_revision": "354f2ddcbb8d14d6dfe9673aac55199976d2d42c",
+  "original_optimizer_observations_reused_in_recovery": false,
+  "reference_replay": "runtime_fix_validation.json",
+  "reference_replay_counts_toward_budget": false,
+  "comparison_scope": "Same target, bounds, initial vector, objective and 100 simulation slots per seed. Agents receive richer feedback than scalar-loss baselines. BO recovered separately on CPU; hardware and wall time are not matched.",
+  "summary": "summary.json"
+}

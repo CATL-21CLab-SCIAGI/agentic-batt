@@ -1,5 +1,7 @@
 # Reproducing the local pilots
 
+For the later 100-evaluation, three-seed battery comparison, its recorded results, and the BO runtime recovery, see [the matched campaign protocol](matched_benchmark.md). The commands below reproduce the earlier local pilots.
+
 Run the commands below from the repository root. Python 3.11 and Git are required for experiment setup. Ollama must serve the selected locally installed model at `http://127.0.0.1:11434`; setup scripts do not download model weights or configure paid services. Package installation and upstream cloning require internet access.
 
 ## Inspect existing measurements
@@ -86,6 +88,6 @@ The adapter checks generated Python before OPAL applies it. The first scheduled 
 
 During packaging, the relocated OPAL plain runner reproduced every original loss and the final parameter hash. The battery compatibility patch was checked against the pinned source and archived case snapshots. New agent inference was not run during packaging. Generated plots were visually inspected.
 
-The MNIST result is one seed, with 13 additional correct test predictions and slightly higher test cross entropy. Battery cases are simulated targets, not validation on physical cells. A controlled next study needs matched objectives and evaluation budgets for battery fitting, and repeated seeds with quality-versus-compute measurements for OPAL.
+The MNIST result is one seed, with 13 additional correct test predictions and slightly higher test cross entropy. Battery cases are simulated targets, not validation on physical cells. The [matched battery campaign](matched_benchmark.md) addresses the earlier pilot's unequal objectives and evaluation budgets. Broader battery targets and repeated OPAL seeds with quality-versus-compute measurements remain future work.
 
 The overhead figure assumes a fixed total wait of 917.96 seconds and computes `wait / (training_time + wait)`. It excludes new distributed coordination costs and per-step overhead from changed optimizer code. It is a projection, not evidence from distributed training.

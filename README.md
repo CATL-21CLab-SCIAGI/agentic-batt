@@ -1,28 +1,29 @@
 # Agentic Batt
 
-Agent-versus-baseline experiments for battery parameter fitting, plus an OPAL neural-network optimization pilot. Results below come from the recorded October 24–26, 2026 runs.
+Agent-versus-baseline experiments for battery parameter fitting, plus an OPAL neural-network optimization pilot.
 
-A new [matched-budget battery campaign](docs/matched_benchmark.md) compares Gemma, Qwen, CMA-ES, and BO at **100 evaluations × three seeds per method** on one cloud GPU. Its [deployment status](experiments/battery/matched/launch_status.json) is separate from the pilot results below. This single-target study does not establish the paper's reported 58–97% MAPE reduction.
+## Battery: matched 100-evaluation comparison
 
-## Battery agent versus baselines
+Gemma, Qwen, CMA-ES, and BO fit the **same simulated DFN / Chen2020 target**, starting from the same parameters and optimizing the same summed RMSE. Each method receives **100 simulation slots per seed, seeds 0–2**; failed simulations consume slots.
 
-Gemma, CMA-ES, and Bayesian optimization fit the **same simulated battery target** (test 2, PyBaMM DFN / Chen2020). Both panels report common metrics computed from every method’s recorded candidates; lower is better.
+![Matched battery convergence across three seeds](plots/battery_matched.png)
 
-![Gemma versus CMA-ES and Bayesian optimization](plots/battery_all_methods.png)
-
-| Method | Evaluations | Best sum of MAPEs (%) | Best sum of RMSEs |
+| Method | Completed seeds | Best summed RMSE | Best summed MAPE (%) |
 | --- | ---: | ---: | ---: |
-| Gemma agent | 5 | 4.2847 | 0.3598 |
-| CMA-ES | 30 | **2.4894** | **0.2124** |
-| Bayesian optimization | 25 | 8.7494 | 0.6930 |
+| Gemma4 E2B | 3/3 | 3.3546 ± 0.3606 | 63.5987 ± 10.0772 |
+| Qwen3.8 27B | 3/3 | **0.0476 ± 0.0111** | **0.7076 ± 0.1081** |
+| CMA-ES | 3/3 | 0.3743 ± 0.0508 | 3.9079 ± 0.3848 |
+| BO | 3/3 | 0.3686 ± 0.1040 | 7.5642 ± 3.7980 |
 
-Each column selects its own best observed candidate; RMSEs sum mixed physical units. **Gemma reached a low error in five evaluations; CMA-ES achieved the lowest final errors with a larger budget.** Gemma’s curve ends at five—there are no later measurements.
+Values are mean ± sample standard deviation of each seed's best observed score. Each metric selects its own candidate; RMSE sums mix physical units. The plot shows medians and seed ranges. **Qwen achieved lower fitting error than both CMA-ES and BO across these three seeds; Gemma mostly plateaued.** This is one simulated target, not the paper's multi-chemistry 58–97% MAPE claim.
 
-This is a descriptive pilot comparison: budgets, initialization, and feedback differ. Gemma receives physics hints and structured diagnostics; the classical baselines optimize summed RMSE. CMA-ES uses populations of six; BO begins with 18 Sobol evaluations (replayed with parameter checks here), followed by seven model-based evaluations. A controlled ranking needs matched budgets and repeated runs.
+Agents receive physics hints and curve diagnostics; the classical baselines receive scalar loss. The match is in target, starting point, objective, and simulation budget.
 
-[Comparison data](experiments/battery/results/agent_vs_baselines.json) · [Full battery results](experiments/battery/results/summary.json) · [All three Gemma cases](plots/battery_agent_convergence.png)
+All **12 runs and 1,200 slots are complete**: 1,150 valid simulations and 50 numerical solver failures (29 CMA-ES, 21 BO). The original GPU job completed the nine agent/CMA runs, but BO failed at initialization because it loaded an incompatible Torch native library. The repaired launcher passed actual-container checks; all three BO seeds then completed on CPU with the same scientific code and target. Their provenance and timings remain separate, so this is an evaluation-budget comparison rather than an equal-hardware timing comparison.
 
-The other Gemma pilots improved the multi-parameter target but not degradation. Single/multi describes the target perturbation; both first-cycle searches allow nine adjustable parameters.
+[Protocol and recovery details](docs/matched_benchmark.md) · [Results and selected parameters](experiments/battery/matched/results/summary.json) · [Campaign provenance](experiments/battery/matched/results/campaign_manifest.json)
+
+The [earlier five-evaluation Gemma pilot](plots/battery_all_methods.png) reached summed RMSE 0.3598; CMA-ES reached 0.2124 in 30 evaluations. Those runs used different budgets, feedback, and native objectives. The matched runs are fresh experiments, not extensions of those trajectories. [Archived pilot records](experiments/battery/results/summary.json).
 
 ## OPAL agent versus AdamW
 
@@ -47,7 +48,10 @@ Qwen applied one cosine learning-rate restart at update 1,200, preserving AdamW 
 
 ```sh
 python3.11 scripts/verify_results.py
+python3.11 scripts/summarize_matched.py --data experiments/battery/matched/results
 # With requirements-plots.txt installed:
+python3.11 scripts/plot_matched.py \
+  --summary experiments/battery/matched/results/summary.json --out plots/battery_matched
 python3.11 scripts/plot_results.py
 ```
 
