@@ -24,6 +24,9 @@ EXPECTED_WEIGHTS = {
     'gemma4:e2b-qat-google': 'fa401b55b07ee70a54c6dae3903c783a6e65064312529ea57175cb5f8dec6634',
     'qwen3.8:27b-opal': '11fdb2dc2fdec62d4684b0a4b6f6e96da3f9f633de1fba0a78830dff12b54375',
 }
+RUNTIME_DIRECTORIES = ['tmp', 'cache', 'config', 'data', 'state', 'matplotlib', 'ollama-home']
+PYTHON_LOADER_OVERRIDES = {'LD_LIBRARY_PATH', 'LD_PRELOAD', 'DYLD_LIBRARY_PATH',
+                           'DYLD_FALLBACK_LIBRARY_PATH', 'DYLD_INSERT_LIBRARIES'}
 
 
 def write_json(path, value):
@@ -47,6 +50,59 @@ def confined(path, root):
     if not path.is_relative_to(root):
         raise ValueError(f'Path must be inside the persistent namespace: {path}')
     return path
+
+
+def mounted_namespace(root):
+    if not root.is_dir():
+        raise ValueError('Persistent namespace is missing')
+    volume = subprocess.check_output(['findmnt', '-n', '-o', 'TARGET,FSTYPE', '-T', str(root)], text=True).strip()
+    if not volume or volume.split()[0] == '/' or 'overlay' in volume.split()[1:]:
+        raise ValueError('Persistent namespace is not on a mounted data volume')
+    return volume
+
+
+def runtime_environment(run_dir, inherited=None):
+    env = dict(os.environ if inherited is None else inherited)
+    env.update(TMPDIR=str(run_dir / 'tmp'), XDG_CACHE_HOME=str(run_dir / 'cache'),
+               XDG_CONFIG_HOME=str(run_dir / 'config'), XDG_DATA_HOME=str(run_dir / 'data'),
+               XDG_STATE_HOME=str(run_dir / 'state'), MPLCONFIGDIR=str(run_dir / 'matplotlib'),
+               PYBAMM_DISABLE_TELEMETRY='true', OMP_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2',
+               MKL_NUM_THREADS='2', CUDA_CACHE_PATH=str(run_dir / 'cache/cuda'))
+    return env
+
+
+def python_environment(run_dir, python, inherited=None):
+    """Keep prepared Python and its workers independent of image Python/native libs."""
+    env = runtime_environment(run_dir, inherited)
+    for name in list(env):
+        if name.startswith('PYTHON') or name in PYTHON_LOADER_OVERRIDES:
+            del env[name]
+    # The runner's simulator workers invoke sys.executable without -I. These
+    # inherited flags protect those children as well as the isolated main runner.
+    env.update(PYTHONNOUSERSITE='1', PYTHONSAFEPATH='1', PYTHONDONTWRITEBYTECODE='1',
+               VIRTUAL_ENV=str(python.parent.parent),
+               PATH=str(python.parent) + os.pathsep + env.get('PATH', os.defpath))
+    return env
+
+
+def python_command(python):
+    return [str(python), '-I', '-B', '-u']
+
+
+def python_preflight(python, project, run_dir, env, timeout=600):
+    report = run_dir / 'python_preflight.json'
+    command = python_command(python) + [str(Path(__file__).with_name('python_preflight.py')),
+              '--prefix', str(python.parent.parent),
+              '--runner', str(project / 'experiments/battery/matched/run.py'), '--out', str(report)]
+    with (run_dir / 'python_preflight.log').open('a') as log:
+        process = subprocess.run(command, env=env, cwd=run_dir, stdout=log, stderr=subprocess.STDOUT,
+                                 timeout=timeout)
+    if process.returncode != 0:
+        raise RuntimeError(f'Prepared Python preflight failed (exit={process.returncode}); inspect python_preflight.log/json')
+    result = json.loads(report.read_text())
+    if result.get('status') != 'passed':
+        raise RuntimeError('Prepared Python preflight did not pass')
+    return result
 
 
 def stop_child(child):
@@ -95,12 +151,7 @@ def main():
     if not 1800 <= a.max_seconds <= 86400:
         p.error('max-seconds must be 1800..86400')
     root = a.persistent_root.resolve()
-    if not root.is_dir():
-        p.error('Persistent namespace is missing')
-    # Require an actual separately mounted volume, not a pod-root fallback.
-    volume = subprocess.check_output(['findmnt', '-n', '-o', 'TARGET,FSTYPE', '-T', str(root)], text=True).strip()
-    if not volume or volume.split()[0] == '/' or 'overlay' in volume.split()[1:]:
-        p.error('Persistent namespace is not on a mounted data volume')
+    volume = mounted_namespace(root)
     for name in ['project', 'upstream', 'ollama', 'models', 'run_dir']:
         setattr(a, name, confined(getattr(a, name), root))
     # Preserve the venv launcher path: resolving its final symlink would select
@@ -115,7 +166,7 @@ def main():
     if a.run_dir.exists() and not a.resume:
         p.error('Run directory exists; choose another directory or explicitly --resume')
     a.run_dir.mkdir(parents=True, exist_ok=True)
-    for name in ['tmp', 'cache', 'config', 'data', 'state', 'matplotlib', 'ollama-home']:
+    for name in RUNTIME_DIRECTORIES:
         confined(a.run_dir / name, root).mkdir(exist_ok=True)
     os.chmod(a.run_dir / 'ollama-home', 0o700)
     status_path = a.run_dir / 'launcher_status.json'
@@ -161,7 +212,10 @@ def main():
         gpus = [line.strip() for line in gpu_text.splitlines() if line.strip()]
         if len(gpus) != 1:
             raise RuntimeError(f'Expected exactly one visible GPU; found {len(gpus)}')
-        update(gpu_inventory=gpus, mount=volume, phase='verifying_model_weights')
+        update(gpu_inventory=gpus, mount=volume, phase='python_preflight')
+        child_env = python_environment(a.run_dir, a.python)
+        python_preflight(a.python, a.project, a.run_dir, child_env, min(600, remaining()))
+        update(python_preflight_passed=True, phase='verifying_model_weights')
         spec = json.loads((a.project / 'experiments/battery/matched/spec.json').read_text())
         hashes = {}
         for settings in spec['models'].values():
@@ -180,14 +234,9 @@ def main():
         update(weight_sha256=hashes, phase='starting_local_ollama')
         with socket.socket() as test:
             test.bind(('127.0.0.1', 11434))  # Do not attach to an unrelated service.
-        child_env = os.environ.copy()
-        child_env.update(TMPDIR=str(a.run_dir / 'tmp'), XDG_CACHE_HOME=str(a.run_dir / 'cache'),
-                         XDG_CONFIG_HOME=str(a.run_dir / 'config'), XDG_DATA_HOME=str(a.run_dir / 'data'),
-                         XDG_STATE_HOME=str(a.run_dir / 'state'),
-                         MPLCONFIGDIR=str(a.run_dir / 'matplotlib'), PYTHONDONTWRITEBYTECODE='1',
-                         PYBAMM_DISABLE_TELEMETRY='true', OMP_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2',
-                         MKL_NUM_THREADS='2', CUDA_CACHE_PATH=str(a.run_dir / 'cache/cuda'))
-        server_env = child_env.copy()
+        # Ollama keeps the image's CUDA loader environment; only prepared Python
+        # has image Python/library overrides removed.
+        server_env = runtime_environment(a.run_dir)
         # This is only the child process's dedicated home; the calling shell and
         # controller HOME are unchanged. Ollama creates its own local key here.
         server_env.update(HOME=str(a.run_dir / 'ollama-home'), OLLAMA_MODELS=str(a.models),
@@ -229,7 +278,7 @@ def main():
                           'size_vram': active['size_vram'], 'eval_count': response.get('eval_count'), 'success': True})
             write_json(a.run_dir / 'gpu_smoke.json', smoke)
         update(phase='benchmark', status='running', gpu_smoke_passed=True)
-        command = [str(a.python), '-u', str(a.project / 'experiments/battery/matched/run.py'),
+        command = python_command(a.python) + [str(a.project / 'experiments/battery/matched/run.py'),
                    '--upstream', str(a.upstream), '--out', str(a.run_dir / 'benchmark'),
                    '--budget', '100', '--seeds', '0', '1', '2',
                    '--methods', 'gemma', 'qwen', 'cma', 'bo', '--base-url', 'http://127.0.0.1:11434']

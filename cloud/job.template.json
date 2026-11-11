@@ -6,7 +6,7 @@
   "Priority": 1,
   "Accessibility": "PRIVATE",
   "JobMaxRunningTimeMinutes": 1440,
-  "UserCommand": "timeout --signal=TERM --kill-after=90s 85890s <prepared-python> <project>/cloud/run_dlc.py --persistent-root <namespace> --project <project> --upstream <patched-upstream> --python <prepared-python> --ollama <ollama-binary> --models <ollama-model-store> --run-dir <new-run-directory> --max-seconds 85800",
+  "UserCommand": "timeout --signal=TERM --kill-after=90s 85890s <prepared-python> -I -B <project>/cloud/run_dlc.py --persistent-root <namespace> --project <project> --upstream <patched-upstream> --python <prepared-python> --ollama <ollama-binary> --models <ollama-model-store> --run-dir <new-run-directory> --max-seconds 85800",
   "UserVpc": {
     "VpcId": "<private-vpc-id>",
     "SwitchId": "<private-switch-id>",
